@@ -5,7 +5,7 @@ from basemap import basemaps
 # def authenticate():
 #     ee.Authenticate()
 #     ee.Initialize()
-authenticate()
+# authenticate()
 app = Flask(__name__)
 
 @app.route("/")
