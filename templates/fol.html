@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_b3170f75f4b91ccfa6bd999be14b5607 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+            <div class="folium-map" id="map_b3170f75f4b91ccfa6bd999be14b5607" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_b3170f75f4b91ccfa6bd999be14b5607 = L.map(
+                "map_b3170f75f4b91ccfa6bd999be14b5607",
+                {
+                    center: [18.41, 73.74],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_37825901355982084aa5b598531c96b0 = L.tileLayer(
+                "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
+                {"attribution": "Map tiles by \u003ca target=\"_blank\" href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/3.0\"\u003eCC BY SA\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+            var marker_0c95a6e5143bbfe104a629d985bf77ee = L.marker(
+                [18.41, 73.74],
+                {}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+        var popup_175279a6d11a3fedd126d16015fb69e4 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_d4e3bed225a8cd4030eb1d2f7546d29a = $(`<div id="html_d4e3bed225a8cd4030eb1d2f7546d29a" style="width: 100.0%; height: 100.0%;"><i>Khadakwasla</i></div>`)[0];
+                popup_175279a6d11a3fedd126d16015fb69e4.setContent(html_d4e3bed225a8cd4030eb1d2f7546d29a);
+            
+        
+
+        marker_0c95a6e5143bbfe104a629d985bf77ee.bindPopup(popup_175279a6d11a3fedd126d16015fb69e4)
+        ;
+
+        
+    
+    
+            marker_0c95a6e5143bbfe104a629d985bf77ee.bindTooltip(
+                `<div>
+                     Click me!
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_94069079c8d1d72ddd006ef63385bcc8 = L.marker(
+                [18.4323, 73.7624],
+                {}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+        var popup_781492f37ccc5563703d9ff249c0b9c6 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_41347cebdb157cb0b1816993190d8126 = $(`<div id="html_41347cebdb157cb0b1816993190d8126" style="width: 100.0%; height: 100.0%;"><i>Khadakwasla</i></div>`)[0];
+                popup_781492f37ccc5563703d9ff249c0b9c6.setContent(html_41347cebdb157cb0b1816993190d8126);
+            
+        
+
+        marker_94069079c8d1d72ddd006ef63385bcc8.bindPopup(popup_781492f37ccc5563703d9ff249c0b9c6)
+        ;
+
+        
+    
+    
+            marker_94069079c8d1d72ddd006ef63385bcc8.bindTooltip(
+                `<div>
+                     Click me!
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_f285687be654649df890d431452d4547 = L.marker(
+                [18.3946, 73.7022],
+                {}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+        var popup_26c1f1c63f421c2d0b79aca8897fc22f = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_38905649cff1247fed7b40138ac40485 = $(`<div id="html_38905649cff1247fed7b40138ac40485" style="width: 100.0%; height: 100.0%;"><i>Khadakwasla</i></div>`)[0];
+                popup_26c1f1c63f421c2d0b79aca8897fc22f.setContent(html_38905649cff1247fed7b40138ac40485);
+            
+        
+
+        marker_f285687be654649df890d431452d4547.bindPopup(popup_26c1f1c63f421c2d0b79aca8897fc22f)
+        ;
+
+        
+    
+    
+            marker_f285687be654649df890d431452d4547.bindTooltip(
+                `<div>
+                     Click me!
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var marker_5ec4af6018d0c4136782456251b2b44e = L.marker(
+                [18.3964, 73.6724],
+                {}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+        var popup_a0213d1ee0130a083280b4000f7aa010 = L.popup({"maxWidth": "100%"});
+
+        
+            
+                var html_734c47102602493f75e650a35e5b2fe9 = $(`<div id="html_734c47102602493f75e650a35e5b2fe9" style="width: 100.0%; height: 100.0%;"><i>Khadakwasla</i></div>`)[0];
+                popup_a0213d1ee0130a083280b4000f7aa010.setContent(html_734c47102602493f75e650a35e5b2fe9);
+            
+        
+
+        marker_5ec4af6018d0c4136782456251b2b44e.bindPopup(popup_a0213d1ee0130a083280b4000f7aa010)
+        ;
+
+        
+    
+    
+            marker_5ec4af6018d0c4136782456251b2b44e.bindTooltip(
+                `<div>
+                     Click me!
+                 </div>`,
+                {"sticky": true}
+            );
+        
+    
+            var tile_layer_f3dbbc2ee82d904a90257dbdc1fce27f = L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}",
+                {"attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+            var tile_layer_88770aee73f349d57ca503d42baed87c = L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=y\u0026x={x}\u0026y={y}\u0026z={z}",
+                {"attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+    
+            var layer_control_b0696e3c5c506bae3ef8887db238e67f = {
+                base_layers : {
+                    "stamenterrain" : tile_layer_37825901355982084aa5b598531c96b0,
+                },
+                overlays :  {
+                    "Google Maps" : tile_layer_f3dbbc2ee82d904a90257dbdc1fce27f,
+                    "Google Satellite" : tile_layer_88770aee73f349d57ca503d42baed87c,
+                },
+            };
+            L.control.layers(
+                layer_control_b0696e3c5c506bae3ef8887db238e67f.base_layers,
+                layer_control_b0696e3c5c506bae3ef8887db238e67f.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "topright"}
+            ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+        
+</script>
+</html>
