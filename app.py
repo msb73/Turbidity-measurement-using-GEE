@@ -23,3 +23,6 @@ def fullscreen():
     basemaps['Google Satellite Hybrid'].add_to(my_map)
     my_map.add_child(folium.LayerControl())
     return my_map.get_root().render()
+
+if __name__ == '__main__':
+    app.run()
