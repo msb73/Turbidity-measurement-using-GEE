@@ -21,3 +21,4 @@ count = 0
 for i in reduced:
     dic[i[:8]].append(reduced[i])
 # print(reduced.getInfo())
+print(dic)
