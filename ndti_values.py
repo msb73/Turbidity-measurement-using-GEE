@@ -3,7 +3,7 @@ from gee import imageCollection
 geometry = ee.Geometry.Point([73.50502848893966,18.09751560212352])
 
 # imageCollection = imageCollection.select(['B2', 'B3', 'B4'])
-imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-02-01', '2023-02-15').select(['B2', 'B3', 'B4']).filterBounds(geometry=geometry)
+imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-02-01', '2023-04-12').select(['B2', 'B3', 'B4']).filterBounds(geometry=geometry)
 # def conditional(image, list):
 #     return ee.List(list).add(image.reduceRegion(ee.Reducer.toList(), geometry, 10))
 
@@ -22,3 +22,4 @@ for i in reduced:
     dic[i[:8]].append(reduced[i])
 # print(reduced.getInfo())
 print(dic)
+print(len(dic))
