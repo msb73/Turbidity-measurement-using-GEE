@@ -16,8 +16,8 @@ reduced = tobands_image.reduceRegion(
     geometry =  geometry,
     bestEffort = True,
     scale =  10).getInfo()
-# dic = {j[:8] : [] for j in list(reduced.keys())[::3]}
-# count = 0
-# for i in reduced:
-#     dic[i[:8]].append(reduced[i])
+dic = {j[:8] : [] for j in list(reduced.keys())[::3]}
+count = 0
+for i in reduced:
+    dic[i[:8]].append(reduced[i])
 # print(reduced.getInfo())
