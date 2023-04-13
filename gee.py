@@ -1,10 +1,11 @@
 from authenticate import ee
 import folium
-# from cloud_mask import maskS2clouds
-dataset = ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-02-01', '2023-02-15').select(['B4', 'B3', 'B2']).median()
-    # .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',20))\
-    # .map(maskS2clouds)\
-
+from cloud_mask import maskS2clouds
+imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-02-01', '2023-02-15')\
+    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',20))\
+    .map(maskS2clouds)\
+    .select(['TCI_R', 'TCI_G', 'TCI_B','QA60', 'B2', 'B3', 'B4', 'B8'])
+image = imageCollection.mean()
 visParams = {'min':1125.61, 'max':6026.89, 
             #  'palette':['225ea8','41b6c4','a1dab4','034B48']
              }
@@ -19,7 +20,7 @@ visParams = {'min':1125.61, 'max':6026.89,
 # elev = dem.sample(xy, 30).first().get('elevation').getInfo()
 # print('Mount Everest elevation (m):', elev)
 def gee(map):
-    map_id_dict = dataset.getMapId(visParams)
+    map_id_dict = image.getMapId(visParams)
     folium.raster_layers.TileLayer(
         tiles = map_id_dict['tile_fetcher'].url_format,
         attr = 'Google Earth Engine',
