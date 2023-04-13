@@ -9,7 +9,9 @@
         L_NO_TOUCH = false;
         L_DISABLE_3D = false;
     </script>
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/fol.css') }}">
     <style>
         html,
         body {
@@ -18,14 +20,28 @@
             margin: 0;
             padding: 0;
         }
-    </style>
-    <style>
+
+
         #map {
             position: absolute;
             top: 0;
             bottom: 0;
             right: 0;
             left: 0;
+        }
+
+        #map_b3170f75f4b91ccfa6bd999be14b5607 {
+            position: absolute;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+            z-index: -1;
+
+        }
+
+        .leaflet-container {
+            font-size: 1rem;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
@@ -34,40 +50,73 @@
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+
+    <!-- <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" /> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" />
 
+    <meta charset="utf-8">
+
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
+
+
     <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-        #map_b3170f75f4b91ccfa6bd999be14b5607 {
-            position: relative;
-            width: 100.0%;
-            height: 100.0%;
-            left: 0.0%;
-            top: 0.0%;
-        }
 
-        .leaflet-container {
-            font-size: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+
 
 </head>
 
 <body>
 
-    <h1>Yogesh</h1>
+    <!-- 
+    <button type="button" class="btn btn-primary">Primary</button>
+
+
+
+
+    
+
+  Main Navigation-->
+    <div class="wrapper">
+        <input type="checkbox" id="btn" hidden>
+        <label for="btn" class="menu-btn">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
+        </label>
+        <nav id="sidebar">
+            <div class="title">Turbidity Measure</div>
+            <ul class="list-items">
+                
+                <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li>
+                <div class="icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    <!-- <div class="content">
+        <div class="header">Animated Side Navigation Menu</div>
+    <p>using only HTML and CSS</p> 
+   </div>-->
     <div class="folium-map" id="map_b3170f75f4b91ccfa6bd999be14b5607"></div>
 
 </body>
-<script>
 
+<script>
+    // var map = L.map('mapid').setView([51.505, -0.09], 13); // initialize map
 
     var map_b3170f75f4b91ccfa6bd999be14b5607 = L.map(
         "map_b3170f75f4b91ccfa6bd999be14b5607",
@@ -81,13 +130,31 @@
     );
 
 
-
-
-
     var tile_layer_37825901355982084aa5b598531c96b0 = L.tileLayer(
         "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
         { "attribution": "Map tiles by \u003ca target=\"_blank\" href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/3.0\"\u003eCC BY SA\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false }
     ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
+
+
+
+    var marker;
+
+    map_b3170f75f4b91ccfa6bd999be14b5607.on('click', function (e) { // add event listener for map clicks
+        if (marker) {
+            map_b3170f75f4b91ccfa6bd999be14b5607.removeLayer(marker); // remove existing marker, if any
+        }
+        marker = L.marker(e.latlng).addTo(map_b3170f75f4b91ccfa6bd999be14b5607); // add new marker at clicked location
+        console.log(e)
+    });
+
+
+
+
+
+
+
+
+
 
 
     var marker_0c95a6e5143bbfe104a629d985bf77ee = L.marker(
@@ -234,5 +301,18 @@
     ).addTo(map_b3170f75f4b91ccfa6bd999be14b5607);
 
 </script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+<!-- Option 2: Separate Popper and Bootstrap JS -->
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script> -->
+
 
 </html>
