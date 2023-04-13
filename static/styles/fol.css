@@ -36,7 +36,13 @@
   cursor: pointer;
   font-size: 23px;
   transition: all 0.3s ease;
+  margin-top: 250px;
+  padding: 5px 13px 5px 13px;
 }
+button:hover{ 
+   border-color: white;
+}
+
 
 .menu-btn{
   z-index: 9999;
@@ -77,6 +83,15 @@
   left: 0;
   z-index: 2;
 }
+#sidebar .labels{
+
+  text-align: left;
+
+  font-size: 17px;
+  font-weight: 600;
+  color: #f2f2f2;
+  /* border-bottom: 1px solid #222; */
+}
 #sidebar .title{
   line-height: 65px;
   text-align: center;
@@ -109,7 +124,7 @@
   border-top: none;
 }
 #sidebar .list-items li a{
-  color: #f2f2f2;
+  color: #333;
   text-decoration: none;
   font-size: 18px;
   font-weight: 500;
@@ -189,3 +204,4 @@
   top: 0.0%;
   z-index: -1;
 } */
+
