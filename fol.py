@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import folium
 from folium import plugins
+from folium import plugins
 import ee
 from basemap import basemaps
 
@@ -60,6 +61,6 @@ def fullscreen():
 
     
 
-    my_map.save('fol.html')
+    my_map.save('test.html')
 
 fullscreen()
