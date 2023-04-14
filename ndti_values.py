@@ -21,5 +21,32 @@ count = 0
 for i in reduced:
     dic[i[:8]].append(reduced[i])
 # print(reduced.getInfo())
-print(dic)
-print(len(dic))
+# print(dic)
+# print(len(dic))
+import math
+
+# Define the constants for the ATM model
+K = 0.16
+alpha = 1.3
+
+# Define a function to convert RGB values to turbidity values using the ATM model
+def rgb_to_turbidity(rgb):
+    # Convert the RGB values to reflectance
+    reflectance = rgb / 10000.0
+    
+    # Compute the aerosol optical depth (AOD) using the blue band (B2)
+    aod = -math.log(reflectance)
+    
+    # Compute the turbidity coefficient using the ATM model
+    turbidity = K * math.pow(aod, alpha)
+    
+    return turbidity
+
+# Loop through the dictionary and convert the RGB values to turbidity values
+for date in dic:
+    rgb_values = dic[date]
+    turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
+    dic[date] = turbidity_values
+
+print("DIC= ",dic)
+
