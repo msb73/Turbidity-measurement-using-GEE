@@ -43,10 +43,18 @@ def rgb_to_turbidity(rgb):
     return turbidity
 
 # Loop through the dictionary and convert the RGB values to turbidity values
+# for date in dic:
+#     rgb_values = dic[date]
+#     turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
+#     dic[date] = turbidity_values
+
+# Loop through the dictionary and convert the RGB values to mean turbidity values
 for date in dic:
     rgb_values = dic[date]
     turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
-    dic[date] = turbidity_values
+    mean_turbidity = sum(turbidity_values) / len(turbidity_values)
+    dic[date] = mean_turbidity
+
 
 print("DIC= ",dic)
 
