@@ -58,3 +58,37 @@ for date in dic:
 
 print("DIC= ",dic)
 
+import matplotlib.pyplot as plt
+
+# Extract the date and turbidity data from the dictionary
+dates = list(dic.keys())
+turbidity_values = list(dic.values())
+
+# Create a line graph of the turbidity data
+plt.plot(dates, turbidity_values)
+
+# Set the title and axis labels
+plt.title('Turbidity over time')
+plt.xlabel('Date')
+plt.ylabel('Turbidity')
+
+# Rotate the X-axis labels for better readability
+plt.xticks(rotation=45)
+plt.savefig('graphs/line_chart.png')
+# Display the graph
+# plt.show()
+
+
+# BAR Graph
+plt.bar(dates, turbidity_values)
+
+# Set the title and axis labels
+plt.title('Turbidity over time')
+plt.xlabel('Date')
+plt.ylabel('Turbidity')
+
+# Rotate the X-axis labels for better readability
+plt.xticks(rotation=45)
+plt.savefig('graphs/bar_chart.png')
+# Display the graph
+# plt.show()
