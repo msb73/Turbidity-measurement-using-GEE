@@ -25,6 +25,17 @@ def submit_data():
     else:
         return jsonify({'error': 'Invalid request method'}), 405  # return an error response if the request method is not POST
 
+@app.route('/getCoordinates', methods=['POST'])
+def get_Coordinates():
+    if request.method == 'POST':
+        Coordinates = request.get_json()  # get the JSON data from the request body
+        # do something with the data, e.g. store it in a database
+        print(Coordinates)  # print the data to the console
+        return jsonify({'success': True}), 200  # return a success response
+    else:
+        return jsonify({'error': 'Invalid request method'}), 405  # return an error response if the request method is not POST
+
+
 if __name__ == '__main__':
     app.run()
 

@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 import folium
-from folium.plugins import Draw, Search
+from folium import plugins
 import ee
 from basemap import basemaps
 
@@ -13,6 +13,14 @@ def fullscreen():
     
     my_map = folium.Map(location=[18.41, 73.74], zoom_start=12, tiles="Stamen Terrain")
     tooltip = "Click me!"
+
+    draw_data = plugins.Draw(export=False,position='topleft', draw_options={'marker': True, 'polyline': False, 
+                                                                 'polygon': False,
+                                                                 'rectangle': False,
+                                                                 'circle': False,
+                                                                 'circlemarker': False}, edit_options={'edit': False})  
+    
+    draw_data.add_to(my_map)
 
     # folium.Marker(
     # [18.41, 73.74], popup="<i>Khadakwasla</i>", tooltip=tooltip
