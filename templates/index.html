@@ -6,6 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/fol.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/dropdowncode.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/right.css') }}">
 
     <script>
         L_NO_TOUCH = false;
@@ -13,13 +14,13 @@
     </script>
 
     <style>
-        html,
+        /* html,
         body {
             width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
-        }
+        } */
     </style>
     <style>
         #map {
@@ -146,9 +147,12 @@
                             <button class="dropdown-toggle col-sm-11" type="button" data-toggle="dropdown">Select an
                                 option</button>
                             <ul class="dropdown-menu col-sm-10">
-                                <li><a class="dropdown-item" href="#" data-value="Khadakwasla" name="0">Khadakwasla Dam</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="Jambhulwadi" name="1">Jambhulwadi Lake</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="MulaMutha" name="2">Mula Mutha River</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Khadakwasla" name="0">Khadakwasla
+                                        Dam</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Jambhulwadi" name="1">Jambhulwadi
+                                        Lake</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="MulaMutha" name="2">Mula Mutha
+                                        River</a></li>
                             </ul>
                         </div>
                     </div>
@@ -169,8 +173,65 @@
     </div>
 
     <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div>
+    <!-- <div class="container">
+
+    </div> -->
+    <div id="mydiv">
+        <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+        <div id="mydivheader">Click here to move</div>
+        <p>Move</p>
+        <p>this</p>
+        <p>DIV</p>
+      </div>
+
+
 
 </body>
+<script>
+    // Make the DIV element draggable:
+dragElement(document.getElementById("mydiv"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(elmnt.id + "header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    elmnt.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
 
@@ -211,7 +272,7 @@
         }
     );
 
-    
+
 
     function createMap(details) {
 
@@ -309,9 +370,6 @@
 </script>
 
 
-<script>
-
-</script>
 <script type="text/javascript">
 
     var fromdate = "";
