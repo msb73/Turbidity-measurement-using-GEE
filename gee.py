@@ -20,7 +20,7 @@ visParams = {'min':1125.61, 'max':6026.89,
 #   'palette': ['006633', 'E5FFCC', '662A00', 'D8D8D8', 'F5F5F5']}
 # elev = dem.sample(xy, 30).first().get('elevation').getInfo()
 # print('Mount Everest elevation (m):', elev)
-def gee(map):
+def addLayer():
     map_id_dict = image.getMapId(visParams)
     folium.raster_layers.TileLayer(
         tiles = map_id_dict['tile_fetcher'].url_format,
