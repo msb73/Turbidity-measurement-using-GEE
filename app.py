@@ -1,10 +1,9 @@
-from flask import Flask
+# Run application using python app.run
+from flask import Flask, render_template,  request, jsonify
 import folium
-from authenticate import ee
-from imageCollection import imageCollection
-from gee import gee
+from folium.plugins import Draw, Search
+import ee
 from basemap import basemaps
-from cloud_mask import maskS2clouds
 # def authenticate():
 #     ee.Authenticate()
 #     ee.Initialize()
@@ -12,19 +11,31 @@ from cloud_mask import maskS2clouds
 app = Flask(__name__)
 
 @app.route("/")
-def fullscreen():
-    """Simple example of a fullscreen map."""
-    m = folium.Map()
-    # vis_params = {
-    #     'min': 0,
-    #     'max': 4000,
-    #     'palette': ['006633', 'E5FFCC', '662A00', 'D8D8D8', 'F5F5F5']
-    #     }
+def home():
+    return render_template("index.html")
 
-# Create a folium map object.
-    my_map = folium.Map(location=[20, 0], zoom_start=3, height=500)
-    basemaps['Google Maps'].add_to(my_map)
-    basemaps['Google Satellite Hybrid'].add_to(my_map)
-    gee(my_map)
-    my_map.add_child(folium.LayerControl())
-    return my_map.get_root().render()
+
+@app.route('/submitdata', methods=['POST'])
+def submit_data():
+    if request.method == 'POST':
+        data = request.get_json()  # get the JSON data from the request body
+        # do something with the data, e.g. store it in a database
+        print(data)  # print the data to the console
+        return jsonify({'success': True}), 200  # return a success response
+    else:
+        return jsonify({'error': 'Invalid request method'}), 405  # return an error response if the request method is not POST
+
+@app.route('/getCoordinates', methods=['POST'])
+def get_Coordinates():
+    if request.method == 'POST':
+        Coordinates = request.get_json()  # get the JSON data from the request body
+        # do something with the data, e.g. store it in a database
+        print(Coordinates)  # print the data to the console
+        return jsonify({'success': True}), 200  # return a success response
+    else:
+        return jsonify({'error': 'Invalid request method'}), 405  # return an error response if the request method is not POST
+
+
+if __name__ == '__main__':
+    app.run()
+
