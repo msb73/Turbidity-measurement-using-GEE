@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/fol.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/dropdowncode.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/right.css') }}">
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         L_NO_TOUCH = false;
         L_DISABLE_3D = false;
@@ -94,6 +94,9 @@
             left: 0.0%;
             top: 0.0%;
         } */
+        #map {
+            height: 100px;
+        }
 
         .leaflet-container {
             font-size: 1rem;
@@ -118,12 +121,13 @@
             <div class="title">Turbidity Measure</div>
             <ul class="list-items">
                 <br>
-                <form>
+                <form id="my-form" action="{{ url_for('submit_data') }}" method="POST">
                     <div class="row form-group">
                         <p class="labels"> Date from :</p>
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerfrom">
-                                <input type="text" class="form-control calendarfrom">
+                                <!-- <input type="text" class="form-control calendarfrom"> -->
+                                <input type="text" class="form-control calendarfrom" name="datefrom">
                                 <span class="input-group-append">
 
                                 </span>
@@ -134,7 +138,7 @@
                         <p class="labels"> Date to :</p>
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerto">
-                                <input type="text" class="form-control" id="myInput" disabled>
+                                <input type="text" class="form-control" id="myInput" name="dateto" disabled>
 
                                 <span class="input-group-append">
 
@@ -158,11 +162,11 @@
                         </div>
                     </div>
 
+                    <button type="submit" class="sidebar-button">SUBMIT</button>
 
 
                 </form>
                 <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> -->
-                <button type="button" class="sidebar-button">SUBMIT</button>
                 <div class="icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
@@ -172,8 +176,11 @@
             </ul>
         </nav>
     </div>
+    <div class="folium-map" id="map">
+        {{ my_map|safe }}
+    </div>
 
-    <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div>
+    <!-- <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div> -->
     <!-- <div class="container">
 
     </div> -->
@@ -407,59 +414,37 @@
     var selocation = "";
 
 
-    // $('#datepickerfrom').datepicker().on('changeDate', function (e) {
-    //     var selectedDate = moment(e.date).format('DD-MM-YYYY');
-    //     fromdate = selectedDate;
-    //     console.log("asaf", fromdate)
-    //     document.getElementById("myInput").disabled = false;
 
-    //     $(this).datepicker('hide');
-    // });
     var today = new Date();
-    console.log("today",today)
+
     var twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-    console.log("twoMonthsAgo",twoMonthsAgo)
 
-
-   var fromDate = null;
     $('#datepickerfrom').datepicker({
         endDate: twoMonthsAgo,
         format: 'dd-mm-yyyy'
     }).on('changeDate', function (e) {
-        console.log("datepickerfrom",e.date)
-        datepickerfrom = e.date
+        console.log("datepickerfrom", e.date)
 
-        var selectedDate = moment(e.date).format('DD-MMMM-YYYY');
-        console.log(selectedDate);
+
+        var selectedDate = moment(e.date).format('YYYY-MM-DD');
+        fromdate = selectedDate;
 
         document.getElementById("myInput").disabled = false;
-        fromDate = e.date;
-        $('#datepickerto').datepicker('setStartDate', moment(fromDate).add(1, 'months').toDate());
+        $('#datepickerto').datepicker('setStartDate', moment(e.date).add(1, 'months').toDate());
         $(this).datepicker('hide');
-        console.log(fromDate)
+
 
     });
-    
-    // $('#datepickerto').datepicker().on('changeDate', function (e) {
-    //     var selectedDate = moment(e.date).format('DD-MM-YYYY');
-    //     todate = selectedDate;
 
-    //     $(this).datepicker('hide');
-    // });
-
-    // console.log(datepickerfrom);
-
-    // var oneMonthslater = new Date(datepickerfrom.getFullYear(), today.getMonth() - 1, today.getDate());
 
     $('#datepickerto').datepicker({
-        // startDate: new Date(),
-        endDate: new Date(), // disable dates after current date
+
+        endDate: new Date(),
         format: 'dd-mm-yyyy'
     }).on('changeDate', function (e) {
-        var selectedDate = moment(e.date).format('DD-MMMM-YYYY');
-        console.log(selectedDate);
+        var selectedDate = moment(e.date).format('YYYY-MM-DD');
         $(this).datepicker('hide');
-
+        todate = selectedDate
     });
 
     $('.dropdown-item').on('click', function () {
@@ -501,6 +486,8 @@
                 P_selocation: selocation
             };
 
+            console.log(submitdata)
+
             fetch('/submitdata', {
                 method: 'POST',
                 headers: {
@@ -508,13 +495,21 @@
                 },
                 body: JSON.stringify(submitdata)
             })
+                // .then(response => response.json())
+                // .then(data => {
+                //     btn.checked = false;
+                //     // console.log('Success:', data);
+                // })
+                // .catch((error) => {
+                //     console.error('Error:', error);
+                // });
                 .then(response => response.json())
                 .then(data => {
-                    btn.checked = false;
-                    // console.log('Success:', data);
+                    console.log("asfdsf", data)
                 })
-                .catch((error) => {
-                    console.error('Error:', error);
+                .catch(error => {
+                    // handle network error
+                    console.error('Failed to retrieve name:', error);
                 });
 
 
@@ -524,6 +519,27 @@
 
     });
 </script>
+<!-- <script>
+    function submitForm() {
+      // submit the form using AJAX
+      $.ajax({
+        url: $('#my-form').attr('action'),
+        method: $('#my-form').attr('method'),
+        data: $('#my-form').serialize(),
+        success: function(response) {
+          // reload the page
+          location.reload();
+        }
+      });
+    }
+    
+    // call the submitForm function when the form is submitted
+    $('#my-form').submit(function(event) {
+      event.preventDefault();
+      submitForm();
+    });
+    </script>  
+     -->
 
 
 </html>
