@@ -123,7 +123,7 @@
                         <p class="labels"> Date from :</p>
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerfrom">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control calendarfrom">
                                 <span class="input-group-append">
 
                                 </span>
@@ -134,7 +134,8 @@
                         <p class="labels"> Date to :</p>
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerto">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" id="myInput" disabled>
+
                                 <span class="input-group-append">
 
                                 </span>
@@ -176,61 +177,89 @@
     <!-- <div class="container">
 
     </div> -->
-    <div id="mydiv">
+    <div id="mydiv" style="display: none;">
         <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
         <div id="mydivheader">Click here to move</div>
         <p>Move</p>
         <p>this</p>
         <p>DIV</p>
-      </div>
+    </div>
 
 
 
 </body>
 <script>
+    // $(document).ready(function () {
+    //     $('#datepickerto').datepicker({
+    //         format: 'dd/mm/yyyy',
+    //         beforeShowDay: function (date) {
+    //             // Disable dates
+    //             var disabledDates = ['2023-04-15', '2023-04-16', '2023-04-17'];
+    //             var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
+    //             return [disabledDates.indexOf(string) == -1];
+    //         }
+    //     });
+    // });
+
+
+</script>
+<script>
+    function toggleDiv(data) {
+        var div = document.getElementById("mydiv");
+
+        //   alert(data)
+
+        if (data === "block") {
+            div.style.display = "block";
+        } else {
+            div.style.display = "none";
+        }
+    }
+</script>
+<script>
     // Make the DIV element draggable:
-dragElement(document.getElementById("mydiv"));
+    dragElement(document.getElementById("mydiv"));
 
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
-  }
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            // if present, the header is where you move the DIV from:
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            // otherwise, move the DIV from anywhere inside the DIV:
+            elmnt.onmousedown = dragMouseDown;
+        }
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
@@ -328,6 +357,7 @@ function dragElement(elmnt) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
+            toggleDiv("block");
 
 
 
@@ -377,18 +407,59 @@ function dragElement(elmnt) {
     var selocation = "";
 
 
-    $('#datepickerfrom').datepicker().on('changeDate', function (e) {
-        var selectedDate = moment(e.date).format('DD-MM-YYYY');
-        fromdate = selectedDate;
-        console.log("asaf", fromdate)
+    // $('#datepickerfrom').datepicker().on('changeDate', function (e) {
+    //     var selectedDate = moment(e.date).format('DD-MM-YYYY');
+    //     fromdate = selectedDate;
+    //     console.log("asaf", fromdate)
+    //     document.getElementById("myInput").disabled = false;
 
+    //     $(this).datepicker('hide');
+    // });
+    var today = new Date();
+    console.log("today",today)
+    var twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    console.log("twoMonthsAgo",twoMonthsAgo)
+
+
+   var fromDate = null;
+    $('#datepickerfrom').datepicker({
+        endDate: twoMonthsAgo,
+        format: 'dd-mm-yyyy'
+    }).on('changeDate', function (e) {
+        console.log("datepickerfrom",e.date)
+        datepickerfrom = e.date
+
+        var selectedDate = moment(e.date).format('DD-MMMM-YYYY');
+        console.log(selectedDate);
+
+        document.getElementById("myInput").disabled = false;
+        fromDate = e.date;
+        $('#datepickerto').datepicker('setStartDate', moment(fromDate).add(1, 'months').toDate());
         $(this).datepicker('hide');
+        console.log(fromDate)
+
     });
-    $('#datepickerto').datepicker().on('changeDate', function (e) {
-        var selectedDate = moment(e.date).format('DD-MM-YYYY');
-        todate = selectedDate;
+    
+    // $('#datepickerto').datepicker().on('changeDate', function (e) {
+    //     var selectedDate = moment(e.date).format('DD-MM-YYYY');
+    //     todate = selectedDate;
 
+    //     $(this).datepicker('hide');
+    // });
+
+    // console.log(datepickerfrom);
+
+    // var oneMonthslater = new Date(datepickerfrom.getFullYear(), today.getMonth() - 1, today.getDate());
+
+    $('#datepickerto').datepicker({
+        // startDate: new Date(),
+        endDate: new Date(), // disable dates after current date
+        format: 'dd-mm-yyyy'
+    }).on('changeDate', function (e) {
+        var selectedDate = moment(e.date).format('DD-MMMM-YYYY');
+        console.log(selectedDate);
         $(this).datepicker('hide');
+
     });
 
     $('.dropdown-item').on('click', function () {
@@ -410,6 +481,13 @@ function dragElement(elmnt) {
 
     const btn = document.querySelector('#btn');
     const button = document.querySelector('.sidebar-button');
+
+    btn.addEventListener('click', () => {
+        toggleDiv("none");
+
+    })
+
+
 
     button.addEventListener('click', () => {
         if (!selocation) {
@@ -438,6 +516,9 @@ function dragElement(elmnt) {
                 .catch((error) => {
                     console.error('Error:', error);
                 });
+
+
+
 
         }
 
