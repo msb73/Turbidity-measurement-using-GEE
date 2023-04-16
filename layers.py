@@ -1,13 +1,13 @@
 from authenticate import ee 
 import folium
 from cloud_mask import maskS2clouds
-def mM(image) -> dict:
+def mM(image) :
     #imc.getInfo()['bands'][0]['data_type']['min']
     return image.reduceRegion(
         reducer =  ee.Reducer.minMax(), 
         geometry =  image.geometry(),
         bestEffort = True,
-        scale =  10).getInfo()
+        scale =  10)
 
 def addRasterLayers(image : ee.Image, map: folium.map, name : str , visParams : dict):
         folium.raster_layers.TileLayer(
@@ -130,8 +130,10 @@ def ndwi(collection, name) -> ee.Geometry:
         .clip(dic[name])\
         .normalizedDifference(['B3', 'B8'])\
         .rename('NDWI').gte(0.0)
-
-def ndti(collection, map, name):
+def callback(s):
+     print(s)
+     return s
+def ndtifunc(collection, map, name):
     ndwi_image = ndwi(collection, name)
     ndti = collection.select(['B3', 'B4'])\
         .median()\
@@ -139,28 +141,23 @@ def ndti(collection, map, name):
         .rename('NDTI')
     ndti = ndti.updateMask(ndwi_image)
     minMax = mM(ndti)
-    visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
-                 'bands' : ['NDTI'],
-                 'opacity' : 1,
-         'palette':['225ea8','41b6c4','a1dab4','034B48']
-         }
-    # visParams = {'min':0, 'max':1, 
-    #              'bands' : ['NDWI'],
+    # visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
+    #              'bands' : ['NDTI'],
     #              'opacity' : 1,
-    #      'palette':['blue','red']
-    #      }
-    # print('layers')
-    # print(id(map))
-    addRasterLayers(ndti, map, 'NDTI', visParams)
+    #      'palette':['225ea8','41b6c4','a1dab4','034B48']
+        #  }
+
+    # addRasterLayers(ndti, map, 'NDTI', visParams)
+    return minMax
     # return collection.filterBounds(ndwi_geometry)
 
 ##################################TESTING CODE########################################
-# def imageCollection():
-#     return ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-01-01', '2023-01-27')\
-#     .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',20))\
-#     .map(maskS2clouds)\
-#     .select(['TCI_R', 'TCI_G', 'TCI_B','QA60', 'B2', 'B3', 'B4', 'B8'])
+def imageCollection():
+    return ee.ImageCollection('COPERNICUS/S2_SR').filterDate('2023-01-01', '2023-01-27')\
+    .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',20))\
+    .map(maskS2clouds)\
+    .select(['TCI_R', 'TCI_G', 'TCI_B','QA60', 'B2', 'B3', 'B4', 'B8'])
 
-# collection = imageCollection()
-# map = folium.Map()
-# ndti(collection, map, 'Khadakwasla')
+collection = imageCollection()
+map = folium.Map()
+ndti = ndtifunc(collection, map, 'Khadakwasla')
