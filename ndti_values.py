@@ -18,7 +18,7 @@ def ndti(graph_num, coordinates):
     # imageCollection = imageCollection.select(['B2', 'B3', 'B4'])
     imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate(
         '2023-02-01', '2023-04-12').select(['B2', 'B3', 'B4']).filterBounds(geometry=geometry)
-    #def conditional(image, list):
+    # def conditional(image, list):
     #   return ee.List(list).add(image.reduceRegion(ee.Reducer.toList(), geometry, 10))
 
     # ls = imageCollection.iterate(conditional, ee.List([]))
@@ -82,8 +82,9 @@ def ndti(graph_num, coordinates):
     plt.xlabel('Date')
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
-    plt.savefig(f'graphs/line_chart_{graph_num}.png')  # Save the graph as a PNG image file
-    #plt.clf()
+    # Save the graph as a PNG image file
+    plt.savefig(f'graphs/line_chart_{graph_num}.png')
+    # plt.clf()
     # plt.show()
 
     # Create a bar chart of the turbidity data
@@ -93,7 +94,8 @@ def ndti(graph_num, coordinates):
     plt.xlabel('Date')
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
-    plt.savefig(f'graphs/bar_chart_{graph_num}.png')  # Save the graph as a PNG image file
+    # Save the graph as a PNG image file
+    plt.savefig(f'graphs/bar_chart_{graph_num}.png')
     # plt.show()
     plt.clf()
     # Start a new thread to run the plot_data function

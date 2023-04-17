@@ -10,7 +10,6 @@ import json
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from read_json import get_coordinates
 from ndti_values import ndti
 
 
@@ -44,7 +43,7 @@ observer.schedule(event_handler, path='.', recursive=False)
 
 
 class MyHandler(FileSystemEventHandler):
-   
+
     def on_created(self, event):
         if event.is_directory:
             return -1
@@ -52,13 +51,12 @@ class MyHandler(FileSystemEventHandler):
             time.sleep(1)
             coordinates = get_coordinates()
             if coordinates != None:
-                #print(coordinates)
-                #print(coordinates[0])
+                # print(coordinates)
+                # print(coordinates[0])
                 for i in range(len(coordinates)):
                     graph_num = i
-                    ndti(graph_num = graph_num, coordinates=coordinates[i])
+                    ndti(graph_num=graph_num, coordinates=coordinates[i])
                     graph_num += 1
-                    
 
             # do something with the coordinates here
 

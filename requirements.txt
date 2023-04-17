@@ -1,3 +1,4 @@
+autopep8 @ file:///opt/conda/conda-bld/autopep8_1650463822033/work
 branca==0.6.0
 cachetools==5.3.0
 certifi @ file:///Users/cbousseau/work/recipes/ci_py311/certifi_1677903144932/work/certifi
@@ -32,6 +33,7 @@ Pillow==9.5.0
 protobuf==4.22.3
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
+pycodestyle @ file:///Users/cbousseau/work/recipes/ci_py311/pycodestyle_1677927047034/work
 pyparsing==3.0.9
 python-dateutil==2.8.2
 pytz==2023.3
@@ -39,7 +41,9 @@ requests==2.28.2
 rsa==4.9
 seaborn==0.12.2
 six==1.16.0
+toml @ file:///tmp/build/80754af9/toml_1616166611790/work
 tzdata==2023.3
 uritemplate==4.1.1
 urllib3==1.26.15
+watchdog==3.0.0
 Werkzeug==2.2.3
