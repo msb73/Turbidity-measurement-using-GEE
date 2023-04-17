@@ -91,23 +91,29 @@ def home():
 
         # return jsonify({'success': True}), 200  # return a success response
    
-@app.route("/submitdata", methods=['POST'])
+@app.route("/submit_data", methods=['POST'])
 def submit_data():
-    # date_from = request.form['datefrom']
-    # date_to = request.form['dateto']
+    def convertdate(givendate):
 
-    # def convertdate(givendate):
+        # convert the date string to a datetime object
+        date_obj = datetime.strptime(givendate, '%d-%m-%Y')
 
-    # # convert the date string to a datetime object
-    #     date_obj = datetime.strptime(givendate, '%d-%m-%Y')
+        # convert the datetime object to a string in 'YYYY-MM-DD' format
+        date_formatted = date_obj.strftime('%Y-%m-%d')
+        return date_formatted
 
-    # # convert the datetime object to a string in 'YYYY-MM-DD' format
-    #     date_formatted = date_obj.strftime('%Y-%m-%d')
-    #     return date_formatted
-    # # data = request.get_json()  # get the JSON data from the request body
-    # print(convertdate(date_from))
-    date = ('2023-01-01', '2023-02-15')
-    location = 'Khadakwasla'
+
+    date_from = request.form['datefrom']
+    date_to = request.form['dateto']
+    location = request.form['location']
+
+    if not date_from or not date_to or not location:
+        error_message = 'Please fill in all the required fields.'
+        return render_template('index.html', error_message=error_message)
+
+    # date = ('2023-01-01', '2023-02-15')
+    date = (convertdate(date_from), convertdate(date_to))
+
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
@@ -116,7 +122,7 @@ def submit_data():
     my_map.add_child(folium.LayerControl())
     print("sdvsvkjb")
     return render_template('index.html', my_map=my_map._repr_html_())
-    # return render_template('hello.html')
+
 
 @app.route('/getCoordinates', methods=['POST'])
 def get_Coordinates():

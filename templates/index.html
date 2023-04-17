@@ -127,7 +127,7 @@
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerfrom">
                                 <!-- <input type="text" class="form-control calendarfrom"> -->
-                                <input type="text" class="form-control calendarfrom" name="datefrom">
+                                <input type="text" class="form-control calendarfrom" name="datefrom" required>
                                 <span class="input-group-append">
 
                                 </span>
@@ -138,7 +138,7 @@
                         <p class="labels"> Date to :</p>
                         <div class="col-sm-11">
                             <div class="input-group date" id="datepickerto">
-                                <input type="text" class="form-control" id="myInput" name="dateto" disabled>
+                                <input type="text" class="form-control" id="myInput" name="dateto">
 
                                 <span class="input-group-append">
 
@@ -149,16 +149,18 @@
                     <div class="row form-group">
                         <p class="labels">Select location :</p>
                         <div class="dropdown">
-                            <button class="dropdown-toggle col-sm-11" type="button" data-toggle="dropdown">Select an
+                            <button class="dropdown-toggle col-sm-11" type="button" data-toggle="dropdown"
+                                required>Select an
                                 option</button>
                             <ul class="dropdown-menu col-sm-10">
                                 <li><a class="dropdown-item" href="#" data-value="Khadakwasla" name="0">Khadakwasla
                                         Dam</a></li>
                                 <li><a class="dropdown-item" href="#" data-value="Jambhulwadi" name="1">Jambhulwadi
                                         Lake</a></li>
-                                <li><a class="dropdown-item" href="#" data-value="MulaMutha" name="2">Mula Mutha
+                                <li><a class="dropdown-item" href="#" data-value="Mula mutha" name="2">Mula Mutha
                                         River</a></li>
                             </ul>
+                            <input type="hidden" name="location" id="selected_location">
                         </div>
                     </div>
 
@@ -166,6 +168,9 @@
 
 
                 </form>
+                {% if error_message %}
+                <div class="alert alert-danger">{{ error_message }}</div>
+                {% endif %}
                 <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> -->
                 <div class="icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -176,10 +181,8 @@
             </ul>
         </nav>
     </div>
-    <div class="folium-map" id="map">
+    <div id="map"></div>
         {{ my_map|safe }}
-    </div>
-
     <!-- <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div> -->
     <!-- <div class="container">
 
@@ -455,12 +458,16 @@
         $('.dropdown-toggle').text($(this).text());
         selocation = value;
 
-        var selectedNum = parseInt(selectedName);
 
-        createMap(areas_locations[selectedNum]);
+
+        // createMap(areas_locations[selectedNum]);
 
 
     });
+    $('.dropdown-menu a').click(function () {
+        $('#selected_location').val($(this).data('value'));
+    });
+
 
 
 
