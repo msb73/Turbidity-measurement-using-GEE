@@ -27,7 +27,7 @@ def fullscreen():
     # [18.3946, 73.7022], popup="<i>Khadakwasla</i>", tooltip=tooltip
     # ).add_to(my_map)
 
-    draw_data = plugins.Draw(export=False, filename='my_data.json',position='topleft', draw_options={'marker': True, 'polyline': False, 
+    draw_data = plugins.Draw(export=False,position='topleft', draw_options={'marker': True, 'polyline': False, 
                                                                  'polygon': False,
                                                                  'rectangle': False,
                                                                  'circle': False,
