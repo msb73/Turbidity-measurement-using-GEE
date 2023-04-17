@@ -5,13 +5,69 @@ from imageCollection import imageCollection
 from basemap import basemaps
 import layers
 from datetime import datetime
+import os
+import json
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from read_json import get_coordinates
+from ndti_values import ndti
 
-# def authenticate():
-#     ee.Authenticate()
-#     ee.Initialize()
-# authenticate()
+
 app = Flask(__name__)
 collection = ee.ImageCollection
+
+
+def get_coordinates():
+    if os.path.exists('my_data.json'):
+        with open('my_data.json') as f:
+            data = json.load(f)
+
+        coordinates = []
+        for feature in data['features']:
+            coordinates.append(feature['geometry']['coordinates'])
+
+        os.remove('my_data.json')
+        return coordinates
+
+    else:
+        return None
+
+
+# create the Observer and EventHandler objects
+event_handler = FileSystemEventHandler()
+observer = Observer()
+observer.schedule(event_handler, path='.', recursive=False)
+
+# define the event handler's on_created() method to be called
+# when a file is created in the watched directory
+
+
+class MyHandler(FileSystemEventHandler):
+   
+    def on_created(self, event):
+        if event.is_directory:
+            return -1
+        elif event.src_path.endswith(".json"):
+            time.sleep(1)
+            coordinates = get_coordinates()
+            if coordinates != None:
+                #print(coordinates)
+                #print(coordinates[0])
+                for i in range(len(coordinates)):
+                    graph_num = i
+                    ndti(graph_num = graph_num, coordinates=coordinates[i])
+                    graph_num += 1
+                    
+
+            # do something with the coordinates here
+
+
+# add the event handler to the Observer and start it
+event_handler = MyHandler()
+observer = Observer()
+observer.schedule(event_handler, path='.', recursive=False)
+observer.start()
 
 
 @app.route("/")
@@ -20,7 +76,7 @@ def home():
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
     # my_map.add_child(folium.LayerControl())
-    return render_template('index.html', my_map=my_map._repr_html_())
+    return render_template('test.html', my_map=my_map._repr_html_())
 
 # def fullscreen():
 #     my_map = folium.Map(location=[18.409749, 73.700581], zoom_start=3, height=1000)
@@ -59,14 +115,13 @@ def home():
 #     return render_template('index.html', my_map=my_map._repr_html_())
 
 
-
 # @app.route('/submitdata', methods=['POST'])
 # def submit_data():
-   
+
 
 #         data = request.get_json()  # get the JSON data from the request body
 
-       
+
 #         dates = (data['P_fromdate'], data['P_todate'])
 #         print(dates)  # print the data to the console
 #         location = data['P_selocation']
@@ -86,11 +141,11 @@ def home():
 
 #         my_map.add_child(folium.LayerControl())
 #         print('******************DONE***********************')
-        
+
 #         return render_template('index.html', my_map=my_map._repr_html_())
 
-        # return jsonify({'success': True}), 200  # return a success response
-   
+    # return jsonify({'success': True}), 200  # return a success response
+
 @app.route("/submit_data", methods=['POST'])
 def submit_data():
     def convertdate(givendate):
@@ -101,7 +156,6 @@ def submit_data():
         # convert the datetime object to a string in 'YYYY-MM-DD' format
         date_formatted = date_obj.strftime('%Y-%m-%d')
         return date_formatted
-
 
     date_from = request.form['datefrom']
     date_to = request.form['dateto']

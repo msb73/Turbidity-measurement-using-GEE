@@ -27,7 +27,7 @@ def fullscreen():
     # [18.3946, 73.7022], popup="<i>Khadakwasla</i>", tooltip=tooltip
     # ).add_to(my_map)
 
-    draw_data = plugins.Draw(export=False,position='topleft', draw_options={'marker': True, 'polyline': False, 
+    draw_data = plugins.Draw(export=True, filename='my_data.json',position='topleft', draw_options={'marker': True, 'polyline': False, 
                                                                  'polygon': False,
                                                                  'rectangle': False,
                                                                  'circle': False,
@@ -40,19 +40,19 @@ def fullscreen():
     # [18.3964, 73.6724], popup="<i>Khadakwasla</i>", tooltip=tooltip
     # ).add_to(my_map)
     ### GRAPHS CODE START
-    import json
-    import requests
+    # import json
+    # import requests
 
-    url = (
-        "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-    )
-    vis3 = json.loads(requests.get(f"{url}/vis2.json").text)
-    folium.Marker(
-    location=[18.3964, 73.672],
-    popup=folium.Popup(max_width=450).add_child(
-        folium.Vega(vis3, width=450, height=250)
-    ),
-    ).add_to(my_map)
+    # url = (
+    #     "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
+    # )
+    # vis3 = json.loads(requests.get(f"{url}/vis2.json").text)
+    # folium.Marker(
+    # location=[18.3964, 73.672],
+    # popup=folium.Popup(max_width=450).add_child(
+    #     folium.Vega(vis3, width=450, height=250)
+    # ),
+    # ).add_to(my_map)
     ### GRAPH CODE END
 
     basemaps['Google Maps'].add_to(my_map)
@@ -61,6 +61,6 @@ def fullscreen():
 
     
 
-    my_map.save('test.html')
+    my_map.save('templates/test.html')
 
 fullscreen()
