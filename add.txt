@@ -1,0 +1,18 @@
+
+                fetch(&#x27;/getCoordinates&#x27;, {
+                    method: &#x27;POST&#x27;,
+                    headers: {
+                        &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+                    },
+                    body: JSON.stringify(coords),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                    console.log(&#x27;Success:&#x27;, data);
+                    })
+                    .catch((error) => {
+                    console.error(&#x27;Error:&#x27;, error);
+                    });
+                toggleDiv(&#x27;block&#x27;);
+
+

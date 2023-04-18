@@ -138,17 +138,17 @@ def ndti(collection, map, name):
         .normalizedDifference(['B3', 'B4'])\
         .rename('NDTI')
     ndti = ndti.updateMask(ndwi_image)
-    # minMax = mM(ndti)
-    # visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
-    #              'bands' : ['NDTI'],
-    #              'opacity' : 1,
-    #      'palette':['225ea8','41b6c4','a1dab4','034B48']
-    #      }
-    visParams = {'min':0, 'max':1, 
+    minMax = mM(ndti)
+    visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
                  'bands' : ['NDTI'],
                  'opacity' : 1,
-         'palette':['blue','red']
+         'palette':['225ea8','41b6c4','a1dab4','034B48']
          }
+    # visParams = {'min':0, 'max':1, 
+    #              'bands' : ['NDTI'],
+    #              'opacity' : 1,
+    #      'palette':['blue','red']
+    #      }
     # print('layers')
     # print(id(map))
     addRasterLayers(ndti, map, 'NDTI', visParams)
