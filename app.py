@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, json
 import folium
 from authenticate import ee
 from imageCollection import imageCollection
 from basemap import basemaps
 import layers
 from datetime import datetime
+from folium import plugins
 
 # def authenticate():
 #     ee.Authenticate()
@@ -107,9 +108,9 @@ def submit_data():
     date_to = request.form['dateto']
     location = request.form['location']
 
-    if not date_from or not date_to or not location:
-        error_message = 'Please fill in all the required fields.'
-        return render_template('index.html', error_message=error_message)
+    # if not date_from or not date_to or not location:
+    #     error_message = 'Please fill in all the required fields.'
+    #     return render_template('index.html', error_message=error_message)
 
     # date = ('2023-01-01', '2023-02-15')
     date = (convertdate(date_from), convertdate(date_to))
@@ -117,10 +118,20 @@ def submit_data():
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
+    draw_data = plugins.Draw(export=False,position='topleft', draw_options={'marker': True, 'polyline': False, 
+                                                                 'polygon': False,
+                                                                 'rectangle': False,
+                                                                 'circle': False,
+                                                                 'circlemarker': False}, edit_options={'edit': False})  
+    
+    draw_data.add_to(my_map)
+    
     collection = imageCollection(date)
     collection = layers.ndti(collection, my_map, location)
     my_map.add_child(folium.LayerControl())
     print("sdvsvkjb")
+    map_id = my_map.get_name()
+    print("Map ID:", map_id)
     return render_template('index.html', my_map=my_map._repr_html_())
 
 
@@ -135,18 +146,10 @@ def get_Coordinates():
         # return an error response if the request method is not POST
         return jsonify({'error': 'Invalid request method'}), 405
 
-# @app.route('/')
-# def index():
-#     # create a Folium map object
-#     my_map = folium.Map(location=[40.7128, -74.0060], zoom_start=12)
-#     map_style = {
-#         'position': 'absolute',
-#         'width': '100.0%',
-#         'height': '500px',  # set the height to a fixed pixel value
-#         'left': '0.0%',
-#         'top': '0.0%',
-#         'z-index': 0
-#     }
 
-#     # render the HTML template and pass the map object and CSS styles as variables
-#     return render_template('hello.html', my_map=my_map._repr_html_(), map_style=map_style)
+@app.route("/layer-click", methods=["POST"])
+def layer_click():
+    coords = json.loads(request.form["coords"])
+    # Do something with the coordinates
+    print(coords)
+    return "success"

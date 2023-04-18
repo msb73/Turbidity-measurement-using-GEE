@@ -168,9 +168,7 @@
 
 
                 </form>
-                {% if error_message %}
-                <div class="alert alert-danger">{{ error_message }}</div>
-                {% endif %}
+
                 <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> -->
                 <div class="icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -181,8 +179,11 @@
             </ul>
         </nav>
     </div>
+
     <div id="map"></div>
-        {{ my_map|safe }}
+    {{ my_map|safe }}
+
+<!-- <div class="folium-map" id="map_7c09348c5ddc6c005363f5a01a1e2dc1" ></div> -->
     <!-- <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div> -->
     <!-- <div class="container">
 
@@ -196,23 +197,10 @@
     </div>
 
 
-
 </body>
-<script>
-    // $(document).ready(function () {
-    //     $('#datepickerto').datepicker({
-    //         format: 'dd/mm/yyyy',
-    //         beforeShowDay: function (date) {
-    //             // Disable dates
-    //             var disabledDates = ['2023-04-15', '2023-04-16', '2023-04-17'];
-    //             var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-    //             return [disabledDates.indexOf(string) == -1];
-    //         }
-    //     });
-    // });
 
 
-</script>
+
 <script>
     function toggleDiv(data) {
         var div = document.getElementById("mydiv");
@@ -299,113 +287,8 @@
     ]
 
 
-    var map_8542910ce8a63ee35340afaac40895e4 = L.map(
-        "map_8542910ce8a63ee35340afaac40895e4",
-        {
-            // center: [18.41, 73.74],
-            center: [18.531863, 73.860569],
-            crs: L.CRS.EPSG3857,
-            zoom: 13,
-            zoomControl: true,
-            preferCanvas: true,
-        }
-    );
+   
 
-
-
-    function createMap(details) {
-
-        const { name, Latitude, Longitude, zoom } = details;
-        map_8542910ce8a63ee35340afaac40895e4.setView([Latitude, Longitude], zoom);
-    }
-
-
-
-
-
-    var tile_layer_ed3ffb39a6281ab5bc65d1ace7cfc5f6 = L.tileLayer(
-        "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
-        { "attribution": "Map tiles by \u003ca target=\"_blank\" href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/3.0\"\u003eCC BY SA\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false }
-    ).addTo(map_8542910ce8a63ee35340afaac40895e4);
-
-
-    var options = {
-        position: "topleft",
-        draw: { "circle": false, "circlemarker": false, "marker": true, "polygon": false, "polyline": false, "rectangle": false },
-        edit: { "edit": false },
-    }
-    // FeatureGroup is to store editable layers.
-    var drawnItems = new L.featureGroup().addTo(
-        map_8542910ce8a63ee35340afaac40895e4
-    );
-    options.edit.featureGroup = drawnItems;
-    var draw_control_d82d6fd4088a8c5198836e56f9f03afd = new L.Control.Draw(
-        options
-    ).addTo(map_8542910ce8a63ee35340afaac40895e4);
-    map_8542910ce8a63ee35340afaac40895e4.on(L.Draw.Event.CREATED, function (e) {
-        var layer = e.layer,
-            type = e.layerType;
-
-        var coords = JSON.stringify(layer.toGeoJSON());
-        layer.on('click', function () {
-            alert(coords);
-            console.log(coords);
-
-
-            fetch('/getCoordinates', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(coords)
-            })
-                .then(response => response.json())
-                .then(data => {
-
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            toggleDiv("block");
-
-
-
-        });
-        drawnItems.addLayer(layer);
-    });
-    map_8542910ce8a63ee35340afaac40895e4.on('draw:created', function (e) {
-        drawnItems.addLayer(e.layer);
-    });
-
-
-
-    var tile_layer_f98e474313b1429416a0eeadcf3b7f7e = L.tileLayer(
-        "https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}",
-        { "attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false }
-    ).addTo(map_8542910ce8a63ee35340afaac40895e4);
-
-
-    var tile_layer_56a6a9a477d7c311ecb64a2c56b03ac7 = L.tileLayer(
-        "https://mt1.google.com/vt/lyrs=y\u0026x={x}\u0026y={y}\u0026z={z}",
-        { "attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false }
-    ).addTo(map_8542910ce8a63ee35340afaac40895e4);
-
-
-    var layer_control_f9c7fa78db1568a50dc25570ecf10c72 = {
-        base_layers: {
-            "stamenterrain": tile_layer_ed3ffb39a6281ab5bc65d1ace7cfc5f6,
-        },
-        overlays: {
-            "Google Maps": tile_layer_f98e474313b1429416a0eeadcf3b7f7e,
-            "Google Satellite": tile_layer_56a6a9a477d7c311ecb64a2c56b03ac7,
-        },
-    };
-    L.control.layers(
-        layer_control_f9c7fa78db1568a50dc25570ecf10c72.base_layers,
-        layer_control_f9c7fa78db1568a50dc25570ecf10c72.overlays,
-        { "autoZIndex": true, "collapsed": true, "position": "topright" }
-    ).addTo(map_8542910ce8a63ee35340afaac40895e4);
 
 </script>
 
