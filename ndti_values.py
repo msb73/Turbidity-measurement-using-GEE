@@ -85,7 +85,10 @@ def ndti(coordinates):
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
     # Save the graph as a PNG image file
-    plt.savefig(f'graphs/{coordinates}.png')
+    plt.savefig(f'static/graphs/{coordinates}.png')
+    
+    return f'graphs/{coordinates}.png'
+    # plt.savefig(f'static/graphs/graphout.png')
     # plt.clf()
     # plt.show()
 

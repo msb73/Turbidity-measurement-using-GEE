@@ -5,9 +5,13 @@
  
 </head>
 <body>
-    <body style="margin: 0; padding: 0;">
-        <div id="map" style="position: absolute; width: 100.0%; height: 100.0%; left: 0.0%; top: 0.0%; z-index: 0;"></div>
-        {{ my_map|safe }}
-    
+  
+        
+    <button onClick="callFun()">Hello</button>
+   <script>
+        function callFun(){
+            window.parent.showGraphs("Yogesh");
+        }
+    </script> 
 </body>
 </html>
