@@ -150,7 +150,7 @@
 
   <body>
     <div class="wrapper">
-      <input type="checkbox" id="btn" hidden checked />
+      <input type="checkbox" id="btn" hidden />
       <label for="btn" class="menu-btn">
         <i class="fas fa-bars"></i>
         <i class="fas fa-times"></i>
@@ -173,7 +173,7 @@
                     type="text"
                     class="form-control calendarfrom"
                     name="datefrom"
-         
+                    autocomplete="off"
                   />
                   <span class="input-group-append"> </span>
                 </div>
@@ -188,12 +188,14 @@
                     class="form-control"
                     id="myInput"
                     name="dateto"
+                    autocomplete="off"
+                    disabled
                   />
-
-                  <span class="input-group-append"> </span>
+                  <span class="input-group-append"></span>
                 </div>
               </div>
             </div>
+
             <div class="row form-group">
               <p class="labels labelloc">Select location :</p>
               <div class="dropdown">
@@ -201,7 +203,6 @@
                   class="dropdown-toggle col-sm-11"
                   type="button"
                   data-toggle="dropdown"
-             
                 >
                   Select an option
                 </button>
@@ -241,82 +242,184 @@
             <button type="submit" class="sidebar-button">SUBMIT</button>
           </form>
 
-          <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> -->
+          <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> 
           <div class="icons">
             <a href="#"><i class="fab fa-facebook-f"></i></a>
             <a href="#"><i class="fab fa-twitter"></i></a>
             <a href="#"><i class="fab fa-github"></i></a>
             <a href="#"><i class="fab fa-youtube"></i></a>
-          </div>
+          </div> -->
         </ul>
       </nav>
     </div>
 
-    <!-- <div id="map"></div>
-    {{ my_map|safe }} -->
     <iframe id="my-iframe" src="map.html"></iframe>
-    <!-- <div class="folium-map" id="map_7c09348c5ddc6c005363f5a01a1e2dc1" ></div> -->
-    <!-- <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div> -->
-    <!-- <div class="container">
 
-    </div> -->
     <div id="mydiv" style="display: none">
-      <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
-
-      <img
+      <!--<img
         id="myImage"
         src="static/graphs/su3.gif"
-        style="width: 100%; height: 400px; padding: 10px"
-      />
+        style="width: 100%; height: 100px; padding: 10px"
+      />-->
+      <div class="accordion" id="accordionExample">
+        
+      </div>
     </div>
   </body>
 
   <script>
+    $(function () {
+      var b = $("#button");
+      var w = $("#wrapper");
+      var l = $("#list");
+
+      w.height(l.outerHeight(true));
+
+      b.click(function () {
+        if (w.hasClass("open")) {
+          w.removeClass("open");
+          w.height(0);
+        } else {
+          w.addClass("open");
+          w.height(l.outerHeight(true));
+        }
+      });
+    });
+  </script>
+  <script>
+    let cardCount = 0;
+
+    function addNewCard(imageSrc, fileNames, currentCard) {
+      let fileNa = JSON.stringify(fileNames);
+      fileNa = fileNa.replace(/[.,\[\] ]/g, "");
+
+      // increment card count and create new card ID
+      // increment card count and create new card ID
+
+      const newCardId = `card-${fileNa}`;
+      console.log(newCardId);
+      // create new card element
+      const newCard = document.createElement("div");
+      newCard.classList.add("card");
+
+      // create new card header element with button
+      const newHeader = document.createElement("div");
+      newHeader.classList.add("card-header");
+      newHeader.id = `heading${fileNa}`;
+
+      const newButton = document.createElement("button");
+      newButton.classList.add("btn", "btn-link", "collapsed");
+      newButton.setAttribute("type", "button");
+      newButton.setAttribute("data-toggle", "collapse");
+      newButton.setAttribute("data-target", `#${newCardId}`);
+      newButton.setAttribute("aria-expanded", "true"); // set to true for the new card
+      newButton.setAttribute("aria-controls", newCardId);
+      newButton.textContent = `Point No #${fileNa}`;
+
+      newHeader.appendChild(newButton);
+      newCard.appendChild(newHeader);
+
+      // create new card body element
+      const newBody = document.createElement("div");
+      newBody.classList.add("collapse");
+      //newBody.classList.add("show");
+      newBody.setAttribute("id", newCardId);
+      newBody.setAttribute("aria-labelledby", `heading${fileNa}`);
+      newBody.setAttribute("data-parent", "#accordionExample");
+
+      const newCardBody = document.createElement("div");
+      newCardBody.classList.add("card-body");
+      newCardBody.innerHTML = `<img src="${imageSrc}" style="width: 100%; height: 450px; padding: 10px;">`;
+
+      newBody.appendChild(newCardBody);
+      newCard.appendChild(newBody);
+
+      // append new card to accordion
+      const accordion = document.getElementById("accordionExample");
+      accordion.appendChild(newCard);
+      console.log(accordion)
+      // toggle state of other card and new card
+      if (currentCard !== null) {
+        currentCard
+          .querySelector('button[data-toggle="collapse"]')
+          .setAttribute("aria-expanded", "false");
+      }
+      newButton.setAttribute("aria-expanded", "true");
+
+      currentCard = newCard;
+    }
+
+    function openExistingCard(fileNames) {
+      let fileNa = JSON.stringify(fileNames);
+      fileNa = fileNa.replace(/[.,\[\] ]/g, "");
+      const cardId = `card-${fileNa}`;
+      const cardss = document.querySelector(".card");
+      // Get the contents inside the element
+      const cardContents = cardss.innerHTML;
+
+      // Log the contents to the console
+      console.log(cardContents);
+      const card = document.getElementById(cardId);
+      if (card) {
+        const button = card.querySelector(".btn-link");
+        if (button) {
+          button.click();
+        }
+      }
+    }
+  </script>
+  <script>
+    //To call the graphs api
+    const coor = [];
+
+    var img = document.getElementById("myImage");
+
     function showGraphs(data) {
-      alert("Hello");
+      //alert("Hello");
+      //img.src = "static/graphs/su3.gif";
       const jsonObject = JSON.parse(data);
-      var img = document.getElementById("myImage");
 
-      img.src = "static/graphs/su3.gif";
+      //console.log(jsonObject.geometry.coordinates)
+      const newCoordinates = jsonObject.geometry.coordinates;
+      const isPresent = coor.some(
+        (arr) => JSON.stringify(arr) === JSON.stringify(newCoordinates)
+      );
+      if (!isPresent) {
+        coor.push(newCoordinates);
+        fetch("/getCoordinates", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            //console.log("Success:", data.fileName);
 
+            var fileNames = data.fileName;
+            let concats = "static/" + fileNames;
+
+            let currentCard = null;
+            addNewCard(concats, newCoordinates, currentCard);
+            //img.src = concats;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        const orsss = "[" + newCoordinates[0] + ", " + newCoordinates[1] + "]";
+        const fileName = "static/graphs/" + orsss + ".png";
+        //img.src = fileName;
+        openExistingCard(fileName, newCoordinates);
+      }
       // var  concat = "{{ url_for('static', filename='graphs/Settings.gif')}}";
       toggleDiv("block");
-      fetch("/getCoordinates", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("Success:", data.fileName);
-
-          var fileNames = data.fileName;
-
-          let concats = "static/" + fileNames;
-
-          //  let he = 'graphs/[73.75946, 18.432713].png';
-          // let concats = "{% set filename = '" + he + "' %}{{ url_for('static', filename=filename) }}";
-
-          console.log(concats);
-          img.src = concats;
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-
-      //        var stringsss = "[" + jsonObject.geometry.coordinates[0] + ", " + jsonObject.geometry.coordinates[1] + "].png"
-
-      //      console.log(stringsss);
-
-      //    var hello = "[73.693886, 18.481563].png"
-      //  console.log("[73.693886, 18.481563].png")
-      //console.log(stringsss)
     }
   </script>
 
   <script>
+    //To enable analysis page
     function toggleDiv(data) {
       var div = document.getElementById("mydiv");
 
@@ -363,29 +466,41 @@
 
     var twoMonthsAgo = new Date(
       today.getFullYear(),
-      today.getMonth() - 1,
+      today.getMonth() - 2,
       today.getDate()
     );
 
+    //calendar from validation
     $("#datepickerfrom")
       .datepicker({
         endDate: twoMonthsAgo,
         format: "dd-mm-yyyy",
+        beforeShowDay: function (date) {
+          // Calculate the date 2 months ago
+          var twoMonthsAgo = new Date();
+          twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+
+          // Disable dates more than 2 months ago
+          if (date > twoMonthsAgo) {
+            return { enabled: false };
+          }
+
+          return { enabled: true };
+        },
       })
       .on("changeDate", function (e) {
         console.log("datepickerfrom", e.date);
 
         var selectedDate = moment(e.date).format("YYYY-MM-DD");
         fromdate = selectedDate;
-
         document.getElementById("myInput").disabled = false;
         $("#datepickerto").datepicker(
           "setStartDate",
-          moment(e.date).add(1, "months").toDate()
+          moment(e.date).add(2, "months").toDate()
         );
         $(this).datepicker("hide");
       });
-
+    //calendar to validation
     $("#datepickerto")
       .datepicker({
         endDate: new Date(),
@@ -397,6 +512,7 @@
         todate = selectedDate;
       });
 
+    //Dropdown validation
     $(".dropdown-item").on("click", function () {
       var value = $(this).data("value");
       var selectedName = event.target.getAttribute("name");
@@ -436,42 +552,29 @@
       // Get the values of the form fields
       const dateFrom = document.querySelector('[name="datefrom"]').value;
       const dateTo = document.querySelector('[name="dateto"]').value;
-      const location = document.querySelector('#selected_location').value;
+      const location = document.querySelector("#selected_location").value;
       const labelfrom = document.querySelector(".labelfrom");
       const labelTo = document.querySelector(".labelto");
       const labelloc = document.querySelector(".labelloc");
 
-      console.log(dateFrom , dateTo, location)
+      console.log(dateFrom, dateTo, location);
       // Check if all required fields are filled
-    function red(){
-      
-    }
+      const fields = [
+        { value: dateFrom, label: labelfrom },
+        { value: dateTo, label: labelTo },
+        { value: location, label: labelloc },
+      ];
 
-      if (!dateFrom) {
-        //alert('Please fill in all the fields.');
-        labelfrom.style.color = "white";
-        labelTo.style.color = "red"; // Change label color to red
-        labelloc.style.color = "white";
-
-        return;
-      }else if(!dateTo){
-        //alert('Please fill in all the fields.');
-        labelfrom.style.color = "white";
-        labelTo.style.color = "red"; // Change label color to red
-        labelloc.style.color = "white";
-        return;
-      }else if(!location){
-        //alert('Please fill in all the fields.');
-        labelfrom.style.color = "white";
-        labelTo.style.color = "red"; // Change label color to red
-        labelloc.style.color = "white";
-        return;
-      }else{
-        form.submit();
+      for (let field of fields) {
+        if (!field.value) {
+          field.label.style.color = "red";
+          return;
+        }
+        field.label.style.color = "white";
       }
-  
+
       // If all required fields are filled, submit the form
-      
+      form.submit();
     });
   </script>
 </html>

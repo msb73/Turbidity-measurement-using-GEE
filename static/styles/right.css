@@ -39,3 +39,8 @@
     
     backdrop-filter: blur(5px);
   }
+  #wrapper {
+    background: #ccc;
+    overflow: hidden;
+    transition: height 200ms;
+  }
