@@ -3,7 +3,7 @@ import folium
 from authenticate import ee
 from imageCollection import imageCollection
 from basemap import basemaps
-import layers
+# import layers
 from datetime import datetime
 
 import os
@@ -264,3 +264,7 @@ def get_Coordinates():
 
 #     # render the HTML template and pass the map object and CSS styles as variables
 #     return render_template('hello.html', my_map=my_map._repr_html_(), map_style=map_style)
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host='0.0.0.0')

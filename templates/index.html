@@ -352,13 +352,16 @@
     function openExistingCard(fileNames) {
       let fileNa = JSON.stringify(fileNames);
       fileNa = fileNa.replace(/[.,\[\] ]/g, "");
-      const cardId = `card-${fileNa}`;
+      const newCardId = `card-${fileNa}`;
+      
       const cardss = document.querySelector(".card");
       // Get the contents inside the element
       const cardContents = cardss.innerHTML;
 
       // Log the contents to the console
       console.log(cardContents);
+
+      
       const card = document.getElementById(cardId);
       if (card) {
         const button = card.querySelector(".btn-link");
