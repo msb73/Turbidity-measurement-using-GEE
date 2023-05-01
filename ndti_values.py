@@ -7,31 +7,32 @@ matplotlib.use('Agg')
 #import seaborn as sns
 
 
-def ndti(graph_num, coordinates):
+def ndti_values(graph_num, geometry, image):
     #l = []
     # for i in cordinates:
     #     l.append(ee.Geometry.Point(i))
-    print(coordinates)
+    # print(coordinates)
     #geometry = ee.Geometry.Point([73.50502848893966,18.09751560212352])
-    geometry = ee.Geometry.Point(coordinates)
+    # geometry = ee.Geometry.Point(coordinates)
 
     # imageCollection = imageCollection.select(['B2', 'B3', 'B4'])
-    imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate(
-        '2023-02-01', '2023-04-12').select(['B2', 'B3', 'B4']).filterBounds(geometry=geometry)
+    #######################
+    # imageCollection = ee.ImageCollection('COPERNICUS/S2_SR').filterDate(
+    #     '2023-02-01', '2023-04-12').select(['B2', 'B3', 'B4']).filterBounds(geometry=geometry)
     # def conditional(image, list):
     #   return ee.List(list).add(image.reduceRegion(ee.Reducer.toList(), geometry, 10))
 
     # ls = imageCollection.iterate(conditional, ee.List([]))
     # print(ls.getInfo())
-    tobands_image = imageCollection.toBands()
     # def get_ndti(image):
-    reduced = tobands_image.reduceRegion(
-        reducer=ee.Reducer.first(),
+    reduced = image.reduceRegion(
+        reducer=ee.Reducer.toList(),
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {j[:8]: [] for j in list(reduced.keys())[::3]}
-    count = 0
+    dic = {i[:8]: j for i, j in reduced.items()}
+    return dic
+    count =0
     for i in reduced:
         dic[i[:8]].append(reduced[i])
     # print(reduced.getInfo())
@@ -56,11 +57,7 @@ def ndti(graph_num, coordinates):
 
         return turbidity
 
-    # Loop through the dictionary and convert the RGB values to turbidity values
-    # for date in dic:
-    #     rgb_values = dic[date]
-    #     turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
-    #     dic[date] = turbidity_values
+
 
     # Loop through the dictionary and convert the RGB values to mean turbidity values
     for date in dic:
@@ -68,8 +65,6 @@ def ndti(graph_num, coordinates):
         turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
         mean_turbidity = sum(turbidity_values) / len(turbidity_values)
         dic[date] = mean_turbidity
-
-    #print("DIC= ", dic)
 
     # Extract the date and turbidity data from the dictionary
     dates = list(dic.keys())
@@ -106,33 +101,3 @@ def ndti(graph_num, coordinates):
     # thread.join()
 
 
-# Combined Charts
-
-# fig, ax1 = plt.subplots()
-
-# # Create the line chart
-# color = 'tab:blue'
-# ax1.set_xlabel('Date')
-# ax1.set_ylabel('Turbidity', color=color)
-# ax1.plot(dates, turbidity_values, color=color)
-# ax1.tick_params(axis='y', labelcolor=color)
-
-# # Create the bar chart
-# ax2 = ax1.twinx() # Share the x-axis
-# color = 'tab:red'
-# ax2.set_ylabel('Turbidity', color=color)
-# ax2.bar(dates, turbidity_values, color=color, alpha=0.3)
-# ax2.tick_params(axis='y', labelcolor=color)
-
-# # Set the x-axis labels and rotation
-# ax1.set_xticks(range(len(dates)))
-# ax1.set_xticklabels(dates, rotation=45, ha='right')
-
-# # Set the chart title
-# plt.title('Turbidity over time')
-
-# # Save the graph as a PNG image file
-# plt.savefig('graphs/combined_chart.png')
-
-# # Show the chart
-# #plt.show()

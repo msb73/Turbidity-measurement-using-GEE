@@ -10,11 +10,11 @@ import json
 import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from ndti_values import ndti
+from ndti_values import ndti_values
 
-
+print('###############################################################################################')
 app = Flask(__name__)
-collection = ee.ImageCollection
+image = ee.Image
 
 
 def get_coordinates():
@@ -74,91 +74,23 @@ def home():
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
     # my_map.add_child(folium.LayerControl())
-    return render_template('test.html', my_map=my_map._repr_html_())
-
-# def fullscreen():
-#     my_map = folium.Map(location=[18.409749, 73.700581], zoom_start=3, height=1000)
-#     basemaps['Google Satellite Hybrid'].add_to(my_map)
-#     # my_map.add_child(folium.LayerControl())
-#     if request.method == 'GET':
-#         print('post')
-#         return render_template('index.html', my_map=my_map._repr_html_())
-#         # return my_map.get_root().render()
-#     data = request.get_json()  # get the JSON data from the request body
-#         # do something with the data, e.g. store it in a database
-#     print(data)  # print the data to the console
-#     date = ('2023-01-01', '2023-02-15')
-#     location = 'Khadakwasla'
-#     # locations = {
-#     #     'Khadakwasla' : ([20, 0], ee.Geometry.Point([[73.73801385248593, 18.412317318279012]]), 3),
-#     #     'Mula mutha' : ([20, 0], ee.Geometry.Point([[73.8417693187197, 18.436935449462606]]), 30),
-#     #     'Jambhulwadi' : ([20, 0], ee.Geometry.Point([[73.85916092299954, 18.526407602714407]]), 3)
-#     # }
-
-#     collection = imageCollection(date)
-#     visParams = {'min':0, 'max':1,
-#                  'opacity' : 1,
-#              'palette':['red','blue']
-#              }
-#     # layers.addRasterLayers(collection.select(['B2', 'B3', 'B4']).mean(), my_map, 'gotit', visParams)
-#     collection = layers.ndti(collection, my_map, location)
-#     print('app')
-#     print(id(my_map))
-#     print(dir(my_map.add_to))
-#     print(my_map.add_to)
-#     #get center at Khadakwasla
-#     my_map.add_child(folium.LayerControl())
-#     print('get')
-#     # return my_map.get_root().render()
-#     return render_template('index.html', my_map=my_map._repr_html_())
-
-
-# @app.route('/submitdata', methods=['POST'])
-# def submit_data():
-
-
-#         data = request.get_json()  # get the JSON data from the request body
-
-
-#         dates = (data['P_fromdate'], data['P_todate'])
-#         print(dates)  # print the data to the console
-#         location = data['P_selocation']
-
-#         locations = {
-#             'Khadakwasla' : [18.412317318279012, 73.73801385248593 ],
-#             'Mula mutha' : [73.8417693187197, 18.436935449462606],
-#             'Jambhulwadi' :[73.85916092299954, 18.526407602714407]
-#         }
-#         print('*******************************')
-#         print(locations[location])
-#         my_map = folium.Map(location=[18.409749, 73.700581], zoom_start=5, height=1000)
-#         basemaps['Google Satellite Hybrid'].add_to(my_map)
-
-#         collection = imageCollection(dates)
-#         collection = layers.ndti(collection, my_map, location)
-
-#         my_map.add_child(folium.LayerControl())
-#         print('******************DONE***********************')
-
-#         return render_template('index.html', my_map=my_map._repr_html_())
-
-    # return jsonify({'success': True}), 200  # return a success response
+    return render_template('index.html', my_map=my_map._repr_html_())
 
 @app.route("/submit_data", methods=['POST'])
-def submit_data():
+def submit_data():            # after submit button return map with layer
     def convertdate(givendate):
 
         # convert the date string to a datetime object
         date_obj = datetime.strptime(givendate, '%d-%m-%Y')
-
         # convert the datetime object to a string in 'YYYY-MM-DD' format
         date_formatted = date_obj.strftime('%Y-%m-%d')
         return date_formatted
-
-    date_from = request.form['datefrom']
-    date_to = request.form['dateto']
-    location = request.form['location']
-
+    data = request.get_json()
+    date_from = data['P_fromdate']
+    date_to = data['P_todate']
+    location = data['P_selocation']
+    print('location')
+    print(data)
     if not date_from or not date_to or not location:
         error_message = 'Please fill in all the required fields.'
         return render_template('index.html', error_message=error_message)
@@ -169,10 +101,25 @@ def submit_data():
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
-    collection = imageCollection(date)
-    collection = layers.ndti(collection, my_map, location)
+    global image
+    # inner_coll = imageCollection(date)
+    image = layers.ndti(date,  my_map, location)
     my_map.add_child(folium.LayerControl())
     print("sdvsvkjb")
+    #########################################
+    ################ MINE ###################
+    #########################################
+    points = ee.Geometry.MultiPoint(
+    [[73.74118158587497, 18.4148644079408],
+     [73.7428981996445, 18.41983191088514],
+     [73.74650308856052, 18.423740664826617],
+     [73.73268434771579, 18.408349432637745],
+     [73.73963663348239, 18.410466826659608],
+     [73.73440096148532, 18.411932699571228],
+     [73.73663255938571, 18.40859374866174],
+     [73.86408499021032, 18.47600873142659]])
+    dic = ndti_values(None, points, image)
+    print(dic)
     return render_template('index.html', my_map=my_map._repr_html_())
 
 
@@ -187,18 +134,4 @@ def get_Coordinates():
         # return an error response if the request method is not POST
         return jsonify({'error': 'Invalid request method'}), 405
 
-# @app.route('/')
-# def index():
-#     # create a Folium map object
-#     my_map = folium.Map(location=[40.7128, -74.0060], zoom_start=12)
-#     map_style = {
-#         'position': 'absolute',
-#         'width': '100.0%',
-#         'height': '500px',  # set the height to a fixed pixel value
-#         'left': '0.0%',
-#         'top': '0.0%',
-#         'z-index': 0
-#     }
 
-#     # render the HTML template and pass the map object and CSS styles as variables
-#     return render_template('hello.html', my_map=my_map._repr_html_(), map_style=map_style)
