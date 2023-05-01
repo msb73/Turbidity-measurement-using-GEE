@@ -145,7 +145,7 @@ def ndti(collection, map, name):
          'palette':['225ea8','41b6c4','a1dab4','034B48']
          }
     # visParams = {'min':0, 'max':1, 
-    #              'bands' : ['NDTI'],
+    #              'bands' : ['NDWI'],
     #              'opacity' : 1,
     #      'palette':['blue','red']
     #      }
