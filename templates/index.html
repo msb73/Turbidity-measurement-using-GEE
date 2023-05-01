@@ -17,21 +17,18 @@
       type="text/css"
       href="{{ url_for('static',filename='styles/right.css') }}"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/analysisBar.css') }}"
+    />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       L_NO_TOUCH = false;
       L_DISABLE_3D = false;
     </script>
 
-    <style>
-      /* html,
-        body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        } */
-    </style>
+   
     <style>
       #map {
         position: absolute;
@@ -40,6 +37,20 @@
         right: 0;
         left: 0;
       }
+      .progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px;
+      }
+      
+      .progress {
+        height: 100%;
+        border-radius: 10px;
+        background-color: green;
+        transition: width 0.5s ease-in-out;
+      }
+      
     </style>
 
     <!-- For maps -->
@@ -261,12 +272,64 @@
         src="static/graphs/su3.gif"
         style="width: 100%; height: 100px; padding: 10px"
       />-->
-      <div class="accordion" id="accordionExample">
-        
+     <!-- <div class="accordion" id="accordionExample"></div>-->
+     <div class="atitle">Turbidity Analysis</div>
+     <p class="alabels">Dates:</p>
+     <p class="alabels">Coordinates:</p>
+     <p class="alabels">Turbidity Value:</p>
+     <p class="alabels"></p>
+
+
+
+     <p class="alabels">Meter:</p>
+     <div>
+     <div class="progress">
+       <div class="bar" style="width: 3%;"></div>
+       <br>
+       
+     </div>
+     <div class="labels"> <p> kdhfbsdjbf </p> <p> FKnbdsib </p>  </div>
+    </div>
+
+    
+
+     <!--
+      <div class="readout">
+        <p>Turbidity level: <span class="value">3.2 NTU</span></p>
       </div>
+    -->
+
+    
+      <button
+        type="button"
+        class="sidebar-button"
+        id="exportbtn"
+        style="
+          display: none;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+        "
+        onclick="exportData(coor)"
+      >
+        Export
+      </button>
     </div>
   </body>
+<script>
+function increaseProgress(a) {
+  var bar = document.querySelector(".bar");
+  var width = parseInt(a) || 0;
+  if (width < 100) {
+    width += 10;
+    bar.style.width = width + "%";
+  }
+}
 
+
+</script>
   <script>
     $(function () {
       var b = $("#button");
@@ -337,7 +400,7 @@
       // append new card to accordion
       const accordion = document.getElementById("accordionExample");
       accordion.appendChild(newCard);
-      console.log(accordion)
+      console.log(accordion);
       // toggle state of other card and new card
       if (currentCard !== null) {
         currentCard
@@ -353,7 +416,7 @@
       let fileNa = JSON.stringify(fileNames);
       fileNa = fileNa.replace(/[.,\[\] ]/g, "");
       const newCardId = `card-${fileNa}`;
-      
+
       const cardss = document.querySelector(".card");
       // Get the contents inside the element
       const cardContents = cardss.innerHTML;
@@ -361,7 +424,6 @@
       // Log the contents to the console
       console.log(cardContents);
 
-      
       const card = document.getElementById(cardId);
       if (card) {
         const button = card.querySelector(".btn-link");
@@ -372,14 +434,34 @@
     }
   </script>
   <script>
+    function toggleButton(data) {
+      var exportbtn = document.getElementById("exportbtn");
+
+      //   alert(data)
+
+      if (data === "block") {
+        exportbtn.style.display = "block";
+      } else {
+        exportbtn.style.display = "none";
+      }
+    }
+  </script>
+
+  <script>
     //To call the graphs api
     const coor = [];
 
     var img = document.getElementById("myImage");
 
+    //
     function showGraphs(data) {
       //alert("Hello");
       //img.src = "static/graphs/su3.gif";
+      if (coor.length > 0) {
+        alert("done");
+        toggleButton("block");
+      }
+      console.log(coor.length);
       const jsonObject = JSON.parse(data);
 
       //console.log(jsonObject.geometry.coordinates)
@@ -404,6 +486,7 @@
             let concats = "static/" + fileNames;
 
             let currentCard = null;
+            increaseProgress(10)
             addNewCard(concats, newCoordinates, currentCard);
             //img.src = concats;
           })
@@ -418,6 +501,27 @@
       }
       // var  concat = "{{ url_for('static', filename='graphs/Settings.gif')}}";
       toggleDiv("block");
+    }
+
+    function exportData(coor) {
+      fetch("/ExportAllCord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(coor),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          if(data.success == true){
+            alert("Successfully, exported")
+          }
+          // Handle the response from the server if needed
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     }
   </script>
 
@@ -580,4 +684,25 @@
       form.submit();
     });
   </script>
+  <script>
+    const progressBar = document.querySelector('.progress');
+    let progress = 0;
+    
+    function updateProgress() {
+      progress += 10;
+      progressBar.style.width = `${progress}%`;
+      
+      if (progress < 50) {
+        progressBar.style.backgroundColor = 'green';
+      } else if (progress < 80) {
+        progressBar.style.backgroundColor = 'orange';
+      } else {
+        progressBar.style.backgroundColor = 'red';
+      }
+    }
+    
+    setInterval(updateProgress, 1000);
+    
+
+    <script/>
 </html>

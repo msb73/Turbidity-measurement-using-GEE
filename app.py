@@ -1,16 +1,16 @@
 from flask import Flask, request, render_template, jsonify
-import folium
+import folium 
 from authenticate import ee
 from imageCollection import imageCollection
 from basemap import basemaps
-# import layers
+import layers
 from datetime import datetime
 
 import os
 import json
 import time
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+# from watchdog.observers import Observer
+# from watchdog.events import FileSystemEventHandler
 from ndti_values import ndti
 
 from folium import plugins
@@ -161,6 +161,7 @@ def test():
 
 @app.route("/submit_data", methods=['POST'])
 def submit_data():
+    
     def convertdate(givendate):
 
         # convert the date string to a datetime object
@@ -170,26 +171,45 @@ def submit_data():
         date_formatted = date_obj.strftime('%Y-%m-%d')
         return date_formatted
 
-    # date_from = request.form['datefrom']
-    # date_to = request.form['dateto']
-    # location = request.form['location']
-
+    date_from = request.form['datefrom']
+    date_to = request.form['dateto']
+    location = request.form['location']
+    print("details"+date_from, date_to, location)
     # if not date_from or not date_to or not location:
     #     error_message = 'Please fill in all the required fields.'
     #     return render_template('index.html', error_message=error_message)
 
-    date = ('2023-01-01', '2023-02-15')
-    location = 'Khadakwasla'
-    # date = (convertdate(date_from), convertdate(date_to))
+    # date = ('2023-01-01', '2023-02-15')
+    # location = 'Khadakwasla'
+    date = (convertdate(date_from), convertdate(date_to))
 
+    # Define a function to handle the draw:created event
+    def on_draw_created(e):
+        # Get the marker that was created
+        marker = e.layer
+        # Add a popup to the marker
+        marker.bind_popup('Marker added')
+        
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
 
     # collection = imageCollection(date)
     # collection = layers.ndti(collection, my_map, location)
-    my_map.add_child(folium.LayerControl())
+    # my_map.add_child(folium.LayerControl())
+    tooltip = "Click me!"
 
+    # folium.Marker(
+    # [18.41, 73.74], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
+
+    # folium.Marker(
+    # [18.4323, 73.7624], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
+
+    # folium.Marker(
+    # [18.3946, 73.7022], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
     draw_data = plugins.Draw(export=False, position='topleft', draw_options={'marker': True, 'polyline': False,
                                                                              'polygon': False,
                                                                              'rectangle': False,
@@ -197,7 +217,9 @@ def submit_data():
                                                                              'circlemarker': False}, edit_options={'edit': False})
 
     draw_data.add_to(my_map)
-
+    
+    my_map.add_child(folium.LayerControl())
+    
     repl = "alert(coords);"
 
 
@@ -245,6 +267,24 @@ def get_Coordinates():
 
         # graph_num += 1
         return jsonify({'success': True, 'fileName': respo}), 200  # return a success response
+    else:
+        # return an error response if the request method is not POST
+        return jsonify({'error': 'Invalid request method'}), 405
+
+
+
+@app.route('/ExportAllCord', methods=['POST'])
+def Export_All_Cord():
+    if request.method == 'POST':
+        AllCord = request.get_json()
+    # get the JSON data from the request body
+        print("******************************",AllCord)
+        # AllCord = json.loads(AllCord)
+        print(type(AllCord))
+        
+
+        # graph_num += 1
+        return jsonify({'success': True}), 200  # return a success response
     else:
         # return an error response if the request method is not POST
         return jsonify({'error': 'Invalid request method'}), 405
