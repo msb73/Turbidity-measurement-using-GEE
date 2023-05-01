@@ -30,7 +30,7 @@ def ndti_values(graph_num, geometry, image):
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {i[:8]: j for i, j in reduced.items()}
+    dic = {i[:8]+ i[-2::]: j for i, j in reduced.items()}
     return dic
     count =0
     for i in reduced:

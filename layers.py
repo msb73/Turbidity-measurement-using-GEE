@@ -36,7 +36,6 @@ def ndwi(collection) -> ee.Geometry:
         .rename('NDWI').gte(0.0)
 
 def ndti(date, map, name):
-    #Mapping function for ndti band collection
     def ndiff(image):
         return image.normalizedDifference(['B3', 'B4']).rename('NDTI')
     dic = {
@@ -136,15 +135,16 @@ def ndti(date, map, name):
           [73.842, 18.513],
           [73.835, 18.506]]])
 }
-    #Getting first image collection with all bands 
     collection = imageCollection(date, dic[name])
-    #Creating ndti
     ndwi_image = ndwi(collection)
     # Ndti image for layer
-    collection = collection.map(ndiff)
+    ndti = collection.select(['B3', 'B4'])\
+        .median()\
+        .normalizedDifference(['B3', 'B4'])\
+        .rename('NDTI')
     
-    # applying geometry to ndti image
-    ndtiImage = collection.median().updateMask(ndwi_image)         
+    # applying geometry
+    ndti = ndti.updateMask(ndwi_image)         
     # minMax = mM(ndti)
     # visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
     #              'bands' : ['NDTI'],
@@ -158,8 +158,8 @@ def ndti(date, map, name):
          }
     # print('layers')
     # print(id(map))
-    addRasterLayers(ndtiImage, map, 'NDTI', visParams)
-    return collection.toBands()
+    addRasterLayers(ndti, map, 'NDTI', visParams)
+    return collection.select(['B3', 'B8']).toBands()
     # return collection.filterBounds(ndwi_geometry)
 
 ##################################TESTING CODE########################################
