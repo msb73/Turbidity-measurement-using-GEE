@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, jsonify
-import folium 
+import folium
 from authenticate import ee
 from imageCollection import imageCollection
 from basemap import basemaps
@@ -11,12 +11,12 @@ import json
 import time
 # from watchdog.observers import Observer
 # from watchdog.events import FileSystemEventHandler
-from ndti_values import ndti
+from ndti_values import ndti_values
 
 from folium import plugins
 
 app = Flask(__name__)
-collection = ee.ImageCollection
+collection = ee.Image
 
 
 # def get_coordinates():
@@ -60,7 +60,7 @@ collection = ee.ImageCollection
 #                     ndti(graph_num=graph_num, coordinates=coordinates[i])
 #                     graph_num += 1
 
-            # do something with the coordinates here
+# do something with the coordinates here
 
 
 # add the event handler to the Observer and start it
@@ -161,7 +161,7 @@ def test():
 
 @app.route("/submit_data", methods=['POST'])
 def submit_data():
-    
+
     def convertdate(givendate):
 
         # convert the date string to a datetime object
@@ -189,13 +189,13 @@ def submit_data():
         marker = e.layer
         # Add a popup to the marker
         marker.bind_popup('Marker added')
-        
+
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
-
+    global collection
     # collection = imageCollection(date)
-    # collection = layers.ndti(collection, my_map, location)
+    collection = layers.ndti(date, my_map, location)
     # my_map.add_child(folium.LayerControl())
     tooltip = "Click me!"
 
@@ -217,15 +217,14 @@ def submit_data():
                                                                              'circlemarker': False}, edit_options={'edit': False})
 
     draw_data.add_to(my_map)
-    
-    my_map.add_child(folium.LayerControl())
-    
-    repl = "alert(coords);"
 
+    my_map.add_child(folium.LayerControl())
+
+    repl = "alert(coords);"
 
     # s = my_map._repr_html_()
     my_map.save(os.path.join(file_dir, file_name))
-    
+
     # Open and read the HTML file contents into a variable
     with open(os.path.join(file_dir, file_name), 'r') as file:
         html_string = file.read()
@@ -233,7 +232,6 @@ def submit_data():
     # Print the HTML string
     # print(html_string)
 
-    
     rep = """
                 window.parent.showGraphs(coords);        
         """
@@ -241,8 +239,6 @@ def submit_data():
     replaced = html_string.replace(repl, rep)
     with open(os.path.join(file_dir, file_name), 'w') as file:
         file.write(replaced)
-        
-
 
     # replaced.save(os.path.join(file_dir, file_name))
 
@@ -258,19 +254,37 @@ def get_Coordinates():
     # get the JSON data from the request body
 
         Coordinates = json.loads(Coordinates)
-        print(type(Coordinates))
-        print(Coordinates['geometry']['coordinates'])
+        # print(type(Coordinates))
+        # print(Coordinates['geometry']['coordinates'])
 
-        respo = ndti(coordinates=Coordinates['geometry']['coordinates'])
+        respo = ndti_values(
+            None, Coordinates['geometry']['coordinates'], collection)
+        ls = list(respo.values())
+        ls_dates = list(respo.keys())
+        Dates = []
+        NDTI_values = []
+        sum = 0.0
+        for i, j in zip(ls, ls_dates):
+            # Convert the date string to a datetime object
+            date_obj = datetime.strptime(j, '%Y%m%d')
+
+            # Format the datetime object as a string in DD/MM/YYYY format
+            formatted_date_str = date_obj.strftime('%d/%B/%Y')
+            Dates = Dates + [formatted_date_str]
+            NDTI_values = NDTI_values + [i[0]]
+            sum = sum + i[0]
+        mean = sum / float(len(ls))
+
+        print(Dates)
+        print(NDTI_values)
         print(respo)
-       
 
         # graph_num += 1
-        return jsonify({'success': True, 'fileName': respo}), 200  # return a success response
+        # return a success response
+        return jsonify({'success': True, 'Dates': Dates, 'ndtivalues': NDTI_values, 'meanvalue': mean, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
     else:
         # return an error response if the request method is not POST
         return jsonify({'error': 'Invalid request method'}), 405
-
 
 
 @app.route('/ExportAllCord', methods=['POST'])
@@ -278,10 +292,9 @@ def Export_All_Cord():
     if request.method == 'POST':
         AllCord = request.get_json()
     # get the JSON data from the request body
-        print("******************************",AllCord)
+        print("******************************", AllCord)
         # AllCord = json.loads(AllCord)
         print(type(AllCord))
-        
 
         # graph_num += 1
         return jsonify({'success': True}), 200  # return a success response

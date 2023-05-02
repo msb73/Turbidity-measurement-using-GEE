@@ -28,7 +28,6 @@
       L_DISABLE_3D = false;
     </script>
 
-   
     <style>
       #map {
         position: absolute;
@@ -37,20 +36,19 @@
         right: 0;
         left: 0;
       }
-      .progress-bar {
+      /*  .progress-bar {
         width: 100%;
         height: 20px;
         background-color: #ddd;
         border-radius: 10px;
       }
-      
+
       .progress {
         height: 100%;
         border-radius: 10px;
         background-color: green;
         transition: width 0.5s ease-in-out;
-      }
-      
+      } */
     </style>
 
     <!-- For maps -->
@@ -272,34 +270,48 @@
         src="static/graphs/su3.gif"
         style="width: 100%; height: 100px; padding: 10px"
       />-->
-     <!-- <div class="accordion" id="accordionExample"></div>-->
-     <div class="atitle">Turbidity Analysis</div>
-     <p class="alabels">Dates:</p>
-     <p class="alabels">Coordinates:</p>
-     <p class="alabels">Turbidity Value:</p>
-     <p class="alabels"></p>
+      <!-- <div class="accordion" id="accordionExample"></div>-->
+      <div id="ainnerdiv">
+        <div class="atitle">Turbidity Analysis</div>
+        <p class="alabels" id="coordinates">Coordinates:</p>
+        <p class="alabels" id="turbidity">Turbidity Value:</p>
+        <p class="alabels"></p>
 
+        <p class="alabels">Meter:</p>
+        <div>
+          <div class="progress">
+            <div class="bar"></div>
+            <br />
+          </div>
+          <div class="Plabels">
+            <p>0</p>
+            <p>10</p>
+            <p>20</p>
+            <p>30</p>
+            <p>40</p>
+            <p>50</p>
+          </div>
+        </div>
 
+        <table id="myTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>NDTI Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr></tr>
+          </tbody>
+        </table>
 
-     <p class="alabels">Meter:</p>
-     <div>
-     <div class="progress">
-       <div class="bar" style="width: 3%;"></div>
-       <br>
-       
-     </div>
-     <div class="labels"> <p> kdhfbsdjbf </p> <p> FKnbdsib </p>  </div>
-    </div>
-
-    
-
-     <!--
+        <!--
       <div class="readout">
         <p>Turbidity level: <span class="value">3.2 NTU</span></p>
       </div>
     -->
+      </div>
 
-    
       <button
         type="button"
         class="sidebar-button"
@@ -318,18 +330,109 @@
       </button>
     </div>
   </body>
-<script>
-function increaseProgress(a) {
-  var bar = document.querySelector(".bar");
-  var width = parseInt(a) || 0;
-  if (width < 100) {
-    width += 10;
-    bar.style.width = width + "%";
-  }
-}
+  <script>
+    // Select the HTML elements that contain the values to be updated
+    const dateElement = document.getElementById("date");
+    const coordinatesElement = document.getElementById("coordinates");
+    const turbidityElement = document.getElementById("turbidity");
 
+    function updateTable(dateValue, ndtiValue) {
+      // Select the table element
+      const table = document.querySelector("#myTable");
 
-</script>
+      // Example Date and NDTI values
+      const dateValues = dateValue;
+      const ndtiValues = ndtiValue;
+
+      // Clear any existing rows in the table body
+      table.querySelector("tbody").innerHTML = "";
+
+      // Loop through the Date and NDTI values and add a new row to the table for each value
+      for (let i = 0; i < dateValues.length; i++) {
+        // Create a new row element
+        const row = document.createElement("tr");
+
+        // Create a new cell for the Date value
+        const dateCell = document.createElement("td");
+        dateCell.textContent = dateValues[i];
+
+        // Create a new cell for the NDTI value
+        const ndtiCell = document.createElement("td");
+        ndtiCell.textContent = ndtiValues[i];
+
+        // Append the Date and NDTI cells to the new row
+        row.appendChild(dateCell);
+        row.appendChild(ndtiCell);
+
+        // Append the new row to the table
+        table.querySelector("tbody").appendChild(row);
+      }
+    }
+
+    function NDTIconvertion(ndtivalue) {
+      const ndti = ndtivalue; // Replace with your ndti value
+      const min_ndti = 0; // Replace with the minimum ndti value in your dataset
+      const max_ndti = 1; // Replace with the maximum ndti value in your dataset
+      const min_turbidity = 10; // Replace with the desired minimum turbidity value
+      const max_turbidity = 50; // Replace with the desired maximum turbidity value
+
+      const turbidity =
+        ((ndti - min_ndti) / (max_ndti - min_ndti)) *
+          (max_turbidity - min_turbidity) +
+        min_turbidity;
+      return turbidity;
+    }
+    function UpdateAnalysisValues(values) {
+      console.log("Success:", values);
+      Turbidity_Value = NDTIconvertion(values.meanvalue);
+
+      updateTable(values.Dates, values.ndtivalues);
+
+      // Update the values dynamically
+
+      const newCoordinates = values.Coordinates;
+
+      coordinatesElement.textContent = `Coordinates: ${newCoordinates}`;
+      turbidityElement.textContent = `Turbidity Value: ${Turbidity_Value}`;
+
+      increaseProgress(Turbidity_Value);
+    }
+    function increaseProgress(progress) {
+      const bar = document.querySelector(".bar");
+      const labels = document.querySelectorAll(".Plabels p");
+      const maxProgress = 50;
+
+      // calculate the width and update the bar
+      let width = (parseInt(progress) / maxProgress) * 100;
+      bar.style.width = `${width}%`;
+
+      // calculate the color based on the progress value
+      let color;
+      if (progress >= 0 && progress < 10) {
+        color = "lightgreen";
+      } else if (progress >= 10 && progress < 20) {
+        const percent = ((progress - 10) / 10) * 100;
+        color = `linear-gradient(to right, #7FFF00, #32CD32)`;
+      } else if (progress >= 20 && progress < 30) {
+        const percent = ((progress - 20) / 10) * 100;
+        color = `linear-gradient(to right, #32CD32, #FFA500)`;
+      } else if (progress >= 30 && progress < 40) {
+        const percent = ((progress - 30) / 10) * 100;
+        color = `linear-gradient(to right, #FFA500, #FF0000)`;
+      } else if (progress >= 40 && progress <= 50) {
+        const percent = ((progress - 40) / 10) * 100;
+        color = `linear-gradient(to right, #FF0000, #800000)`;
+      }
+      bar.style.background = color;
+
+      // update the label positions
+      labels.forEach((label) => {
+        const labelValue = parseInt(label.textContent);
+        const labelPosition = (labelValue / maxProgress) * 100;
+        label.style.left = `${labelPosition}%`;
+      });
+    }
+  </script>
   <script>
     $(function () {
       var b = $("#button");
@@ -480,14 +583,13 @@ function increaseProgress(a) {
         })
           .then((response) => response.json())
           .then((data) => {
-            //console.log("Success:", data.fileName);
+            UpdateAnalysisValues(data);
+            //var fileNames = data.fileName;
+            //let concats = "static/" + fileNames;
 
-            var fileNames = data.fileName;
-            let concats = "static/" + fileNames;
+            //let currentCard = null;
 
-            let currentCard = null;
-            increaseProgress(10)
-            addNewCard(concats, newCoordinates, currentCard);
+            //addNewCard(concats, newCoordinates, currentCard);
             //img.src = concats;
           })
           .catch((error) => {
@@ -513,9 +615,9 @@ function increaseProgress(a) {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
-          if(data.success == true){
-            alert("Successfully, exported")
+          console.log(data);
+          if (data.success == true) {
+            alert("Successfully, exported");
           }
           // Handle the response from the server if needed
         })
@@ -684,25 +786,5 @@ function increaseProgress(a) {
       form.submit();
     });
   </script>
-  <script>
-    const progressBar = document.querySelector('.progress');
-    let progress = 0;
-    
-    function updateProgress() {
-      progress += 10;
-      progressBar.style.width = `${progress}%`;
-      
-      if (progress < 50) {
-        progressBar.style.backgroundColor = 'green';
-      } else if (progress < 80) {
-        progressBar.style.backgroundColor = 'orange';
-      } else {
-        progressBar.style.backgroundColor = 'red';
-      }
-    }
-    
-    setInterval(updateProgress, 1000);
-    
-
-    <script/>
+  <script></script>
 </html>

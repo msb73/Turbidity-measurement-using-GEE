@@ -1,5 +1,6 @@
 from authenticate import ee 
 import folium
+from imageCollection import imageCollection
 from cloud_mask import maskS2clouds
 def mM(image) -> dict:
     #imc.getInfo()['bands'][0]['data_type']['min']
@@ -27,7 +28,17 @@ def addRasterLayers(image : ee.Image, map: folium.map, name : str , visParams : 
 #     addRasterLayers(image, map, 'RGB', visParams)
 #     return image
 
-def ndwi(collection, name) -> ee.Geometry:
+def ndwi(collection) -> ee.Geometry:
+
+    return collection.select(['B3', 'B8'])\
+        .mean()\
+        .normalizedDifference(['B3', 'B8'])\
+        .rename('NDWI').gte(0.0)
+
+def ndti(date, map, name):
+    #Mapping function for ndti band collection
+    def ndiff(image):
+        return image.normalizedDifference(['B3', 'B4']).rename('NDTI')
     dic = {
         'Khadakwasla' : ee.Geometry.Polygon(
         [[[73.664, 18.398],
@@ -125,33 +136,30 @@ def ndwi(collection, name) -> ee.Geometry:
           [73.842, 18.513],
           [73.835, 18.506]]])
 }
-    return collection.select(['B3', 'B8'])\
-        .mean()\
-        .clip(dic[name])\
-        .normalizedDifference(['B3', 'B8'])\
-        .rename('NDWI').gte(0.0)
-
-def ndti(collection, map, name):
-    ndwi_image = ndwi(collection, name)
-    ndti = collection.select(['B3', 'B4'])\
-        .median()\
-        .normalizedDifference(['B3', 'B4'])\
-        .rename('NDTI')
-    ndti = ndti.updateMask(ndwi_image)
-    minMax = mM(ndti)
-    visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
+    #Getting first image collection with all bands 
+    collection = imageCollection(date, dic[name])
+    #Creating ndti
+    ndwi_image = ndwi(collection)
+    # Ndti image for layer
+    collection = collection.map(ndiff)
+    
+    # applying geometry to ndti image
+    ndtiImage = collection.median().updateMask(ndwi_image)         
+    # minMax = mM(ndti)
+    # visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
+    #              'bands' : ['NDTI'],
+    #              'opacity' : 1,
+    #      'palette':['225ea8','41b6c4','a1dab4','034B48']
+    #      }
+    visParams = {'min':0, 'max':1, 
                  'bands' : ['NDTI'],
                  'opacity' : 1,
-         'palette':['225ea8','41b6c4','a1dab4','034B48']
+         'palette':['blue','red']
          }
-    # visParams = {'min':0, 'max':1, 
-    #              'bands' : ['NDWI'],
-    #              'opacity' : 1,
-    #      'palette':['blue','red']
-    #      }
     # print('layers')
     # print(id(map))
-    addRasterLayers(ndti, map, 'NDTI', visParams)
+    addRasterLayers(ndtiImage, map, 'NDTI', visParams)
+    return collection.toBands()
     # return collection.filterBounds(ndwi_geometry)
 
 ##################################TESTING CODE########################################
@@ -164,3 +172,4 @@ def ndti(collection, map, name):
 # collection = imageCollection()
 # map = folium.Map()
 # ndti(collection, map, 'Khadakwasla')
+# ret = ndti(('2023-01-01', '2023-02-15'), folium.Map(),'Khadakwasla')
