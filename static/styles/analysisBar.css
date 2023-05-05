@@ -1,0 +1,116 @@
+.atitle {
+    line-height: 65px;
+    text-align: center;
+    background: #333;
+    font-size: 25px;
+    font-weight: 600;
+    color: #f2f2f2;
+    border-bottom: 1px solid #222;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.alabels {
+    font-size: 20px;
+    font-weight: 600;
+    color: #070404;
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 30px;
+}
+
+.progress {
+    width: 80%;
+    height: 50px;
+    background-color: #ddd;
+    margin: 0 auto;
+    position: relative;
+}
+
+.bar {
+    height: 100%;
+    background: linear-gradient(to right, #7FFF00, #32CD32, #006400);
+    background-size: 200% 100%;
+    background-position: right center;
+    transition: all 0.5s ease-out;
+}
+
+.Plabels {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.Plabels p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-top: -15px;
+}
+
+
+/* 
+  .readout {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .value {
+    font-weight: bold;
+    font-size: 1.2rem;
+  }*/
+
+#myTable {
+    border-collapse: collapse;
+    width: 80%;
+    height: 50px;
+    font-size: 21px;
+    margin: 0 auto;
+}
+
+#myTable th,
+#myTable td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#myTable th {
+    background-color: #f2f2f2;
+}
+
+#myTable tbody tr:nth-child(even) tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+#myTable tbody tr:hover {
+    background-color: #ddd;
+}
+
+#ainnerdiv {
+    /* Set the height of the container */
+    overflow-y: scroll;
+    /* Add the y-scroll bar */
+    padding: 10px;
+}
+
+#ainnerdiv::-webkit-scrollbar {
+    width: 10px;
+}
+
+#ainnerdiv::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#ainnerdiv::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+#ainnerdiv::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

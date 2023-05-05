@@ -7,10 +7,8 @@ matplotlib.use('Agg')
 #import seaborn as sns
 
 
-def ndti_values(graph_num, geometry, image):
-    #l = []
-    # for i in cordinates:
-    #     l.append(ee.Geometry.Point(i))
+def ndti_values(graph_num, cordinates, image):
+    geometry = ee.Geometry.MultiPoint(cordinates)
     # print(coordinates)
     #geometry = ee.Geometry.Point([73.50502848893966,18.09751560212352])
     # geometry = ee.Geometry.Point(coordinates)
@@ -30,7 +28,7 @@ def ndti_values(graph_num, geometry, image):
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {i[:8]+ i[-2::]: j for i, j in reduced.items()}
+    dic = {i[:8]: j for i, j in reduced.items()}
     return dic
     count =0
     for i in reduced:
@@ -99,5 +97,4 @@ def ndti_values(graph_num, geometry, image):
 
     # # Wait for the thread to finish before exiting the program
     # thread.join()
-
 

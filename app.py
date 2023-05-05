@@ -12,15 +12,90 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from ndti_values import ndti_values
 
-print('###############################################################################################')
+import os
+import json
+import time
+# from watchdog.observers import Observer
+# from watchdog.events import FileSystemEventHandler
+from ndti_values import ndti_values
+
+from folium import plugins
+
 app = Flask(__name__)
-image = ee.Image
+collection = ee.Image
 
 
-def get_coordinates():
-    if os.path.exists('my_data.json'):
-        with open('my_data.json') as f:
-            data = json.load(f)
+# def get_coordinates():
+#     if os.path.exists('my_data.json'):
+#         with open('my_data.json') as f:
+#             data = json.load(f)
+
+#         coordinates = []
+#         for feature in data['features']:
+#             coordinates.append(feature['geometry']['coordinates'])
+
+#         os.remove('my_data.json')
+#         return coordinates
+
+#     else:
+#         return None
+
+
+# create the Observer and EventHandler objects
+# event_handler = FileSystemEventHandler()
+# observer = Observer()
+# observer.schedule(event_handler, path='.', recursive=False)
+
+# define the event handler's on_created() method to be called
+# when a file is created in the watched directory
+
+
+# class MyHandler(FileSystemEventHandler):
+
+#     def on_created(self, event):
+#         if event.is_directory:
+#             return -1
+#         elif event.src_path.endswith(".json"):
+#             time.sleep(1)
+#             coordinates = get_coordinates()
+#             if coordinates != None:
+#                 # print(coordinates)
+#                 # print(coordinates[0])
+#                 for i in range(len(coordinates)):
+#                     graph_num = i
+#                     ndti(graph_num=graph_num, coordinates=coordinates[i])
+#                     graph_num += 1
+
+# do something with the coordinates here
+
+
+# add the event handler to the Observer and start it
+# event_handler = MyHandler()
+# observer = Observer()
+# observer.schedule(event_handler, path='.', recursive=False)
+# observer.start()
+file_dir = 'templates'
+file_name = 'map.html'
+
+# Create the directory if it doesn't exist
+if not os.path.exists(file_dir):
+    os.makedirs(file_dir)
+
+
+@app.route("/")
+def home():
+    my_map = folium.Map(
+        location=[18.409749, 73.700581], zoom_start=12, height=1000)
+    basemaps['Google Satellite Hybrid'].add_to(my_map)
+
+    # Save the map object as an HTML file in the specified directory
+    my_map.save(os.path.join(file_dir, file_name))
+    return render_template('index.html')
+
+
+@app.route('/map.html')
+def test():
+    return render_template('map.html')
 
         coordinates = []
         for feature in data['features']:
@@ -32,52 +107,29 @@ def get_coordinates():
     else:
         return None
 
-
-# create the Observer and EventHandler objects
-event_handler = FileSystemEventHandler()
-observer = Observer()
-observer.schedule(event_handler, path='.', recursive=False)
-
-# define the event handler's on_created() method to be called
-# when a file is created in the watched directory
+# @app.route('/submitdata', methods=['POST'])
+# def submit_data():
 
 
-class MyHandler(FileSystemEventHandler):
 
-    def on_created(self, event):
-        if event.is_directory:
-            return -1
-        elif event.src_path.endswith(".json"):
-            time.sleep(1)
-            coordinates = get_coordinates()
-            if coordinates != None:
-                # print(coordinates)
-                # print(coordinates[0])
-                for i in range(len(coordinates)):
-                    graph_num = i
-                    ndti(graph_num=graph_num, coordinates=coordinates[i])
-                    graph_num += 1
+
+#         dates = (data['P_fromdate'], data['P_todate'])
+#         print(dates)  # print the data to the console
+#         location = data['P_selocation']
 
             # do something with the coordinates here
 
 
-# add the event handler to the Observer and start it
-event_handler = MyHandler()
-observer = Observer()
-observer.schedule(event_handler, path='.', recursive=False)
-observer.start()
+#         my_map.add_child(folium.LayerControl())
+#         print('******************DONE***********************')
 
+#         return render_template('index.html', my_map=my_map._repr_html_())
 
-@app.route("/")
-def home():
-    my_map = folium.Map(
-        location=[18.409749, 73.700581], zoom_start=12, height=1000)
-    basemaps['Google Satellite Hybrid'].add_to(my_map)
-    # my_map.add_child(folium.LayerControl())
-    return render_template('index.html', my_map=my_map._repr_html_())
+    # return jsonify({'success': True}), 200  # return a success response
 
 @app.route("/submit_data", methods=['POST'])
-def submit_data():            # after submit button return map with layer
+def submit_data():
+
     def convertdate(givendate):
 
         # convert the date string to a datetime object
@@ -85,53 +137,154 @@ def submit_data():            # after submit button return map with layer
         # convert the datetime object to a string in 'YYYY-MM-DD' format
         date_formatted = date_obj.strftime('%Y-%m-%d')
         return date_formatted
-    data = request.get_json()
-    date_from = data['P_fromdate']
-    date_to = data['P_todate']
-    location = data['P_selocation']
-    print('location')
-    print(data)
-    if not date_from or not date_to or not location:
-        error_message = 'Please fill in all the required fields.'
-        return render_template('index.html', error_message=error_message)
+
+    date_from = request.form['datefrom']
+    date_to = request.form['dateto']
+    location = request.form['location']
+    print("details"+date_from, date_to, location)
+    # if not date_from or not date_to or not location:
+    #     error_message = 'Please fill in all the required fields.'
+    #     return render_template('index.html', error_message=error_message)
 
     # date = ('2023-01-01', '2023-02-15')
+    # location = 'Khadakwasla'
     date = (convertdate(date_from), convertdate(date_to))
+
+    # Define a function to handle the draw:created event
+    def on_draw_created(e):
+        # Get the marker that was created
+        marker = e.layer
+        # Add a popup to the marker
+        marker.bind_popup('Marker added')
 
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
-    global image
-    # inner_coll = imageCollection(date)
-    image = layers.ndti(date,  my_map, location)
+    global collection
+    # collection = imageCollection(date)
+    collection = layers.ndti(date, my_map, location)
+    # my_map.add_child(folium.LayerControl())
+    tooltip = "Click me!"
+
+    # folium.Marker(
+    # [18.41, 73.74], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
+
+    # folium.Marker(
+    # [18.4323, 73.7624], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
+
+    # folium.Marker(
+    # [18.3946, 73.7022], popup="<i>Khadakwasla</i>", tooltip=tooltip
+    # ).add_to(my_map)
+    draw_data = plugins.Draw(export=False, position='topleft', draw_options={'marker': True, 'polyline': False,
+                                                                             'polygon': False,
+                                                                             'rectangle': False,
+                                                                             'circle': False,
+                                                                             'circlemarker': False}, edit_options={'edit': False})
+
+    draw_data.add_to(my_map)
+
     my_map.add_child(folium.LayerControl())
-    print("sdvsvkjb")
-    #########################################
-    ################ MINE ###################
-    #########################################
-    points = ee.Geometry.MultiPoint(
-    [[73.74118158587497, 18.4148644079408],
-     [73.7428981996445, 18.41983191088514],
-     [73.74650308856052, 18.423740664826617],
-     [73.73268434771579, 18.408349432637745],
-     [73.73963663348239, 18.410466826659608],
-     [73.73440096148532, 18.411932699571228],
-     [73.73663255938571, 18.40859374866174],
-     [73.86408499021032, 18.47600873142659]])
-    dic = ndti_values(None, points, image)
-    print(dic)
-    return render_template('index.html', my_map=my_map._repr_html_())
+
+    repl = "alert(coords);"
+
+    # s = my_map._repr_html_()
+    my_map.save(os.path.join(file_dir, file_name))
+
+    # Open and read the HTML file contents into a variable
+    with open(os.path.join(file_dir, file_name), 'r') as file:
+        html_string = file.read()
+
+    # Print the HTML string
+    # print(html_string)
+
+    rep = """
+                window.parent.showGraphs(coords);        
+        """
+
+    replaced = html_string.replace(repl, rep)
+    with open(os.path.join(file_dir, file_name), 'w') as file:
+        file.write(replaced)
+
+    # replaced.save(os.path.join(file_dir, file_name))
+
+    return render_template('index.html')
+
+# global graph_num = 0
 
 
 @app.route('/getCoordinates', methods=['POST'])
 def get_Coordinates():
     if request.method == 'POST':
-        Coordinates = request.get_json()  # get the JSON data from the request body
-        # do something with the data, e.g. store it in a database
-        print(Coordinates)  # print the data to the console
-        return jsonify({'success': True}), 200  # return a success response
+        Coordinates = request.get_json()
+    # get the JSON data from the request body
+
+        Coordinates = json.loads(Coordinates)
+        # print(type(Coordinates))
+        # print(Coordinates['geometry']['coordinates'])
+
+        respo = ndti_values(
+            None, Coordinates['geometry']['coordinates'], collection)
+        ls = list(respo.values())
+        ls_dates = list(respo.keys())
+        Dates = []
+        NDTI_values = []
+        sum = 0.0
+        for i, j in zip(ls, ls_dates):
+            # Convert the date string to a datetime object
+            date_obj = datetime.strptime(j, '%Y%m%d')
+
+            # Format the datetime object as a string in DD/MM/YYYY format
+            formatted_date_str = date_obj.strftime('%d/%B/%Y')
+            Dates = Dates + [formatted_date_str]
+            NDTI_values = NDTI_values + [i[0]]
+            sum = sum + i[0]
+        mean = sum / float(len(ls))
+
+        print(Dates)
+        print(NDTI_values)
+        print(respo)
+
+        # graph_num += 1
+        # return a success response
+        return jsonify({'success': True, 'Dates': Dates, 'ndtivalues': NDTI_values, 'meanvalue': mean, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
     else:
         # return an error response if the request method is not POST
         return jsonify({'error': 'Invalid request method'}), 405
 
 
+@app.route('/ExportAllCord', methods=['POST'])
+def Export_All_Cord():
+    if request.method == 'POST':
+        AllCord = request.get_json()
+    # get the JSON data from the request body
+        print("******************************", AllCord)
+        # AllCord = json.loads(AllCord)
+        print(type(AllCord))
+
+        # graph_num += 1
+        return jsonify({'success': True}), 200  # return a success response
+    else:
+        # return an error response if the request method is not POST
+        return jsonify({'error': 'Invalid request method'}), 405
+
+# @app.route('/')
+# def index():
+#     # create a Folium map object
+#     my_map = folium.Map(location=[40.7128, -74.0060], zoom_start=12)
+#     map_style = {
+#         'position': 'absolute',
+#         'width': '100.0%',
+#         'height': '500px',  # set the height to a fixed pixel value
+#         'left': '0.0%',
+#         'top': '0.0%',
+#         'z-index': 0
+#     }
+
+#     # render the HTML template and pass the map object and CSS styles as variables
+#     return render_template('hello.html', my_map=my_map._repr_html_(), map_style=map_style)
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host='0.0.0.0')

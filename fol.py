@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 import folium
 from folium import plugins
-from folium import plugins
+
 import ee
 from basemap import basemaps
 
