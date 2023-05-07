@@ -87,7 +87,7 @@ def home():
     my_map = folium.Map(
         location=[18.409749, 73.700581], zoom_start=12, height=1000)
     basemaps['Google Satellite Hybrid'].add_to(my_map)
-
+    my_map.add_child(folium.LayerControl())
     # Save the map object as an HTML file in the specified directory
     my_map.save(os.path.join(file_dir, file_name))
     return render_template('index.html')
@@ -137,6 +137,7 @@ def submit_data():
         # convert the datetime object to a string in 'YYYY-MM-DD' format
         date_formatted = date_obj.strftime('%Y-%m-%d')
         return date_formatted
+    print(dir(request))
 
     date_from = request.form['datefrom']
     date_to = request.form['dateto']
@@ -162,21 +163,12 @@ def submit_data():
     basemaps['Google Satellite Hybrid'].add_to(my_map)
     global collection
     # collection = imageCollection(date)
+    
     collection = layers.ndti(date, my_map, location)
+    my_map.add_child(folium.LayerControl())
     # my_map.add_child(folium.LayerControl())
     tooltip = "Click me!"
 
-    # folium.Marker(
-    # [18.41, 73.74], popup="<i>Khadakwasla</i>", tooltip=tooltip
-    # ).add_to(my_map)
-
-    # folium.Marker(
-    # [18.4323, 73.7624], popup="<i>Khadakwasla</i>", tooltip=tooltip
-    # ).add_to(my_map)
-
-    # folium.Marker(
-    # [18.3946, 73.7022], popup="<i>Khadakwasla</i>", tooltip=tooltip
-    # ).add_to(my_map)
     draw_data = plugins.Draw(export=False, position='topleft', draw_options={'marker': True, 'polyline': False,
                                                                              'polygon': False,
                                                                              'rectangle': False,
@@ -185,7 +177,7 @@ def submit_data():
 
     draw_data.add_to(my_map)
 
-    my_map.add_child(folium.LayerControl())
+    
 
     repl = "alert(coords);"
 
