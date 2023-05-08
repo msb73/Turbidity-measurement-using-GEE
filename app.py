@@ -252,7 +252,7 @@ def get_Coordinates():
         # print(respo, type(respo))
         ls = list(respo.values())
         # print(ls, type(ls), len(ls), ls[0])
-        if len(ls[0]) == 0:
+        if ls[0] == None:
             return jsonify({'success': False, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
 
         ls_dates = list(respo.keys())
