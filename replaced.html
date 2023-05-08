@@ -1,0 +1,139 @@
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    
+        &lt;script&gt;
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        &lt;/script&gt;
+    
+    &lt;style&gt;html, body {width: 100%;height: 100%;margin: 0;padding: 0;}&lt;/style&gt;
+    &lt;style&gt;#map {position:absolute;top:0;bottom:0;right:0;left:0;}&lt;/style&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-1.12.4.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+    
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_aaa476fe47dc97f5b983b922b19cffec {
+                    position: relative;
+                    width: 100.0%;
+                    height: 1000.0px;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+        
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    
+    
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_aaa476fe47dc97f5b983b922b19cffec&quot; &gt;&lt;/div&gt;
+        
+&lt;/body&gt;
+&lt;script&gt;
+    
+    
+            var map_aaa476fe47dc97f5b983b922b19cffec = L.map(
+                &quot;map_aaa476fe47dc97f5b983b922b19cffec&quot;,
+                {
+                    center: [18.409749, 73.700581],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_700e44a45601ec4c2f4c94774a7b93e2 = L.tileLayer(
+                &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            ).addTo(map_aaa476fe47dc97f5b983b922b19cffec);
+        
+    
+            var tile_layer_862c9af8cb07d5172fd2a2326f2e47ad = L.tileLayer(
+                &quot;https://mt1.google.com/vt/lyrs=y\u0026x={x}\u0026y={y}\u0026z={z}&quot;,
+                {&quot;attribution&quot;: &quot;Google&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            ).addTo(map_aaa476fe47dc97f5b983b922b19cffec);
+        
+    
+            var layer_control_35658d059aac1dfeb81880a67422e52e = {
+                base_layers : {
+                    &quot;openstreetmap&quot; : tile_layer_700e44a45601ec4c2f4c94774a7b93e2,
+                },
+                overlays :  {
+                    &quot;Google Satellite&quot; : tile_layer_862c9af8cb07d5172fd2a2326f2e47ad,
+                },
+            };
+            L.control.layers(
+                layer_control_35658d059aac1dfeb81880a67422e52e.base_layers,
+                layer_control_35658d059aac1dfeb81880a67422e52e.overlays,
+                {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
+            ).addTo(map_aaa476fe47dc97f5b983b922b19cffec);
+        
+    
+            var options = {
+              position: &quot;topleft&quot;,
+              draw: {&quot;circle&quot;: false, &quot;circlemarker&quot;: false, &quot;marker&quot;: true, &quot;polygon&quot;: false, &quot;polyline&quot;: false, &quot;rectangle&quot;: false},
+              edit: {&quot;edit&quot;: false},
+            }
+            // FeatureGroup is to store editable layers.
+            var drawnItems = new L.featureGroup().addTo(
+                map_aaa476fe47dc97f5b983b922b19cffec
+            );
+            options.edit.featureGroup = drawnItems;
+            var draw_control_5bc964aca3c72e373b0ee8b3401b0fa6 = new L.Control.Draw(
+                options
+            ).addTo( map_aaa476fe47dc97f5b983b922b19cffec );
+            map_aaa476fe47dc97f5b983b922b19cffec.on(L.Draw.Event.CREATED, function(e) {
+                var layer = e.layer,
+                    type = e.layerType;
+                var coords = JSON.stringify(layer.toGeoJSON());
+                layer.on(&#x27;click&#x27;, function() {
+                    
+                fetch(&#x27;/getCoordinates&#x27;, {
+                    method: &#x27;POST&#x27;,
+                    headers: {
+                        &#x27;Content-Type&#x27;: &#x27;application/json&#x27;,
+                    },
+                    body: JSON.stringify(coords),
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                    console.log(&#x27;Success:&#x27;, data);
+                    })
+                    .catch((error) => {
+                    console.error(&#x27;Error:&#x27;, error);
+                    });
+                
+                toggleDiv(&#x27;block&#x27;);
+                window.parent.showGraphs();        
+        
+                    console.log(coords);
+                });
+                drawnItems.addLayer(layer);
+             });
+            map_aaa476fe47dc97f5b983b922b19cffec.on(&#x27;draw:created&#x27;, function(e) {
+                drawnItems.addLayer(e.layer);
+            });
+            
+        
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div>

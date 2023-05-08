@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/fol.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/dropdowncode.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/right.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/analysisBar.css') }}"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      L_NO_TOUCH = false;
+      L_DISABLE_3D = false;
+    </script>
+
+    <style>
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+      /*  .progress-bar {
+        width: 100%;
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px;
+      }
+
+      .progress {
+        height: 100%;
+        border-radius: 10px;
+        background-color: green;
+        transition: width 0.5s ease-in-out;
+      } */
+    </style>
+
+    <!-- For maps -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"
+    />
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- For UI -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+    />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- For icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <!-- for calendar    -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <meta
+      name="viewport"
+      content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <style>
+      /* #map_8542910ce8a63ee35340afaac40895e4 {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        } */
+      #map {
+        height: 100px;
+      }
+
+      .leaflet-container {
+        font-size: 1rem;
+      }
+
+      #my-iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css"
+    />
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <input type="checkbox" id="btn" hidden />
+      <label for="btn" class="menu-btn">
+        <i class="fas fa-bars"></i>
+        <i class="fas fa-times"></i>
+      </label>
+      <nav id="sidebar">
+        <div class="title">Turbidity Measure</div>
+        <ul class="list-items">
+          <br />
+          <form
+            id="my-form"
+            action="{{ url_for('submit_data') }}"
+            method="POST"
+          >
+            <div class="row form-group">
+              <p class="labels labelfrom">Date from :</p>
+              <div class="col-sm-11">
+                <div class="input-group date" id="datepickerfrom">
+                  <!-- <input type="text" class="form-control calendarfrom"> -->
+                  <input
+                    type="text"
+                    class="form-control calendarfrom"
+                    name="datefrom"
+                    autocomplete="off"
+                  />
+                  <span class="input-group-append"> </span>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <p class="labels labelto">Date to :</p>
+              <div class="col-sm-11">
+                <div class="input-group date" id="datepickerto">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="myInput"
+                    name="dateto"
+                    autocomplete="off"
+                    disabled
+                  />
+                  <span class="input-group-append"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row form-group">
+              <p class="labels labelloc">Select location :</p>
+              <div class="dropdown">
+                <button
+                  class="dropdown-toggle col-sm-11"
+                  type="button"
+                  data-toggle="dropdown"
+                >
+                  Select an option
+                </button>
+                <ul class="dropdown-menu col-sm-10">
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-value="Khadakwasla"
+                      name="0"
+                      >Khadakwasla Dam</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-value="Jambhulwadi"
+                      name="1"
+                      >Jambhulwadi Lake</a
+                    >
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-value="Mula mutha"
+                      name="2"
+                      >Mula Mutha River</a
+                    >
+                  </li>
+                </ul>
+                <input type="hidden" name="location" id="selected_location" />
+              </div>
+            </div>
+
+            <button type="submit" class="sidebar-button">SUBMIT</button>
+          </form>
+
+          <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> 
+          <div class="icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+          </div> -->
+        </ul>
+      </nav>
+    </div>
+
+    <iframe id="my-iframe" src="map.html"></iframe>
+
+    <div id="mydiv" style="display: none">
+      <!--<img
+        id="myImage"
+        src="static/graphs/su3.gif"
+        style="width: 100%; height: 100px; padding: 10px"
+      />-->
+      <!-- <div class="accordion" id="accordionExample"></div>-->
+      <div id="ainnerdiv">
+        <div class="atitle">Turbidity Analysis</div>
+        <p class="alabels" id="coordinates">Coordinates:</p>
+        <p class="alabels" id="turbidity">Turbidity Value:</p>
+        <p class="alabels"></p>
+
+        <p class="alabels">Meter:</p>
+        <div>
+          <div class="progress">
+            <div class="bar"></div>
+            <br />
+          </div>
+          <div class="Plabels">
+            <p>0</p>
+            <p>10</p>
+            <p>20</p>
+            <p>30</p>
+            <p>40</p>
+            <p>50</p>
+          </div>
+        </div>
+
+        <table id="myTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>NDTI Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr></tr>
+          </tbody>
+        </table>
+
+        <!--
+      <div class="readout">
+        <p>Turbidity level: <span class="value">3.2 NTU</span></p>
+      </div>
+    -->
+      </div>
+
+      <button
+        type="button"
+        class="sidebar-button"
+        id="exportbtn"
+        style="
+          display: none;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: auto;
+        "
+        onclick="exportData(coor)"
+      >
+        Export
+      </button>
+    </div>
+  </body>
+  <script>
+    // Select the HTML elements that contain the values to be updated
+    const dateElement = document.getElementById("date");
+    const coordinatesElement = document.getElementById("coordinates");
+    const turbidityElement = document.getElementById("turbidity");
+
+    function updateTable(dateValue, ndtiValue) {
+      // Select the table element
+      const table = document.querySelector("#myTable");
+
+      // Example Date and NDTI values
+      const dateValues = dateValue;
+      const ndtiValues = ndtiValue;
+
+      // Clear any existing rows in the table body
+      table.querySelector("tbody").innerHTML = "";
+
+      // Loop through the Date and NDTI values and add a new row to the table for each value
+      for (let i = 0; i < dateValues.length; i++) {
+        // Create a new row element
+        const row = document.createElement("tr");
+
+        // Create a new cell for the Date value
+        const dateCell = document.createElement("td");
+        dateCell.textContent = dateValues[i];
+
+        // Create a new cell for the NDTI value
+        const ndtiCell = document.createElement("td");
+        ndtiCell.textContent = ndtiValues[i];
+
+        // Append the Date and NDTI cells to the new row
+        row.appendChild(dateCell);
+        row.appendChild(ndtiCell);
+
+        // Append the new row to the table
+        table.querySelector("tbody").appendChild(row);
+      }
+    }
+
+    function NDTIconvertion(ndtivalue) {
+      const ndti = ndtivalue; // Replace with your ndti value
+      const min_ndti = 0; // Replace with the minimum ndti value in your dataset
+      const max_ndti = 1; // Replace with the maximum ndti value in your dataset
+      const min_turbidity = 10; // Replace with the desired minimum turbidity value
+      const max_turbidity = 50; // Replace with the desired maximum turbidity value
+
+      const turbidity =
+        ((ndti - min_ndti) / (max_ndti - min_ndti)) *
+          (max_turbidity - min_turbidity) +
+        min_turbidity;
+      return turbidity;
+    }
+    function UpdateAnalysisValues(values) {
+      console.log("Success:", values);
+      Turbidity_Value = NDTIconvertion(values.meanvalue);
+
+      updateTable(values.Dates, values.ndtivalues);
+
+      // Update the values dynamically
+
+      const newCoordinates = values.Coordinates;
+
+      coordinatesElement.textContent = `Coordinates: ${newCoordinates}`;
+      turbidityElement.textContent = `Turbidity Value: ${Turbidity_Value}`;
+
+      increaseProgress(Turbidity_Value);
+    }
+    function increaseProgress(progress) {
+      const bar = document.querySelector(".bar");
+      const labels = document.querySelectorAll(".Plabels p");
+      const maxProgress = 50;
+
+      // calculate the width and update the bar
+      let width = (parseInt(progress) / maxProgress) * 100;
+      bar.style.width = `${width}%`;
+
+      // calculate the color based on the progress value
+      let color;
+      if (progress >= 0 && progress < 10) {
+        color = "lightgreen";
+      } else if (progress >= 10 && progress < 20) {
+        const percent = ((progress - 10) / 10) * 100;
+        color = `linear-gradient(to right, #7FFF00, #32CD32)`;
+      } else if (progress >= 20 && progress < 30) {
+        const percent = ((progress - 20) / 10) * 100;
+        color = `linear-gradient(to right, #32CD32, #FFA500)`;
+      } else if (progress >= 30 && progress < 40) {
+        const percent = ((progress - 30) / 10) * 100;
+        color = `linear-gradient(to right, #FFA500, #FF0000)`;
+      } else if (progress >= 40 && progress <= 50) {
+        const percent = ((progress - 40) / 10) * 100;
+        color = `linear-gradient(to right, #FF0000, #800000)`;
+      }
+      bar.style.background = color;
+
+      // update the label positions
+      labels.forEach((label) => {
+        const labelValue = parseInt(label.textContent);
+        const labelPosition = (labelValue / maxProgress) * 100;
+        label.style.left = `${labelPosition}%`;
+      });
+    }
+  </script>
+  <script>
+    $(function () {
+      var b = $("#button");
+      var w = $("#wrapper");
+      var l = $("#list");
+
+      w.height(l.outerHeight(true));
+
+      b.click(function () {
+        if (w.hasClass("open")) {
+          w.removeClass("open");
+          w.height(0);
+        } else {
+          w.addClass("open");
+          w.height(l.outerHeight(true));
+        }
+      });
+    });
+  </script>
+  <script>
+    let cardCount = 0;
+
+    function addNewCard(imageSrc, fileNames, currentCard) {
+      let fileNa = JSON.stringify(fileNames);
+      fileNa = fileNa.replace(/[.,\[\] ]/g, "");
+
+      // increment card count and create new card ID
+      // increment card count and create new card ID
+
+      const newCardId = `card-${fileNa}`;
+      console.log(newCardId);
+      // create new card element
+      const newCard = document.createElement("div");
+      newCard.classList.add("card");
+
+      // create new card header element with button
+      const newHeader = document.createElement("div");
+      newHeader.classList.add("card-header");
+      newHeader.id = `heading${fileNa}`;
+
+      const newButton = document.createElement("button");
+      newButton.classList.add("btn", "btn-link", "collapsed");
+      newButton.setAttribute("type", "button");
+      newButton.setAttribute("data-toggle", "collapse");
+      newButton.setAttribute("data-target", `#${newCardId}`);
+      newButton.setAttribute("aria-expanded", "true"); // set to true for the new card
+      newButton.setAttribute("aria-controls", newCardId);
+      newButton.textContent = `Point No #${fileNa}`;
+
+      newHeader.appendChild(newButton);
+      newCard.appendChild(newHeader);
+
+      // create new card body element
+      const newBody = document.createElement("div");
+      newBody.classList.add("collapse");
+      //newBody.classList.add("show");
+      newBody.setAttribute("id", newCardId);
+      newBody.setAttribute("aria-labelledby", `heading${fileNa}`);
+      newBody.setAttribute("data-parent", "#accordionExample");
+
+      const newCardBody = document.createElement("div");
+      newCardBody.classList.add("card-body");
+      newCardBody.innerHTML = `<img src="${imageSrc}" style="width: 100%; height: 450px; padding: 10px;">`;
+
+      newBody.appendChild(newCardBody);
+      newCard.appendChild(newBody);
+
+      // append new card to accordion
+      const accordion = document.getElementById("accordionExample");
+      accordion.appendChild(newCard);
+      console.log(accordion);
+      // toggle state of other card and new card
+      if (currentCard !== null) {
+        currentCard
+          .querySelector('button[data-toggle="collapse"]')
+          .setAttribute("aria-expanded", "false");
+      }
+      newButton.setAttribute("aria-expanded", "true");
+
+      currentCard = newCard;
+    }
+
+    function openExistingCard(fileNames) {
+      let fileNa = JSON.stringify(fileNames);
+      fileNa = fileNa.replace(/[.,\[\] ]/g, "");
+      const newCardId = `card-${fileNa}`;
+
+      const cardss = document.querySelector(".card");
+      // Get the contents inside the element
+      const cardContents = cardss.innerHTML;
+
+      // Log the contents to the console
+      console.log(cardContents);
+
+      const card = document.getElementById(cardId);
+      if (card) {
+        const button = card.querySelector(".btn-link");
+        if (button) {
+          button.click();
+        }
+      }
+    }
+  </script>
+  <script>
+    function toggleButton(data) {
+      var exportbtn = document.getElementById("exportbtn");
+
+      //   alert(data)
+
+      if (data === "block") {
+        exportbtn.style.display = "block";
+      } else {
+        exportbtn.style.display = "none";
+      }
+    }
+  </script>
+
+  <script>
+    //To call the graphs api
+    const coor = [];
+
+    var img = document.getElementById("myImage");
+
+    //
+    function showGraphs(data) {
+      //alert("Hello");
+      //img.src = "static/graphs/su3.gif";
+      if (coor.length > 0) {
+        alert("done");
+        toggleButton("block");
+      }
+      console.log(coor.length);
+      const jsonObject = JSON.parse(data);
+
+      //console.log(jsonObject.geometry.coordinates)
+      const newCoordinates = jsonObject.geometry.coordinates;
+      const isPresent = coor.some(
+        (arr) => JSON.stringify(arr) === JSON.stringify(newCoordinates)
+      );
+      if (!isPresent) {
+        coor.push(newCoordinates);
+        fetch("/getCoordinates", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            UpdateAnalysisValues(data);
+            //var fileNames = data.fileName;
+            //let concats = "static/" + fileNames;
+
+            //let currentCard = null;
+
+            //addNewCard(concats, newCoordinates, currentCard);
+            //img.src = concats;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      } else {
+        const orsss = "[" + newCoordinates[0] + ", " + newCoordinates[1] + "]";
+        const fileName = "static/graphs/" + orsss + ".png";
+        //img.src = fileName;
+        openExistingCard(fileName, newCoordinates);
+      }
+      // var  concat = "{{ url_for('static', filename='graphs/Settings.gif')}}";
+      toggleDiv("block");
+    }
+
+    function exportData(coor) {
+      fetch("/ExportAllCord", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(coor),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          if (data.success == true) {
+            alert("Successfully, exported");
+          }
+          // Handle the response from the server if needed
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  </script>
+
+  <script>
+    //To enable analysis page
+    function toggleDiv(data) {
+      var div = document.getElementById("mydiv");
+
+      //   alert(data)
+
+      if (data === "block") {
+        div.style.display = "block";
+      } else {
+        div.style.display = "none";
+      }
+    }
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script>
+    const areas_locations = [
+      {
+        name: "Khadakwasla",
+        Latitude: 18.409749,
+        Longitude: 73.700581,
+        zoom: 14,
+      },
+      {
+        name: "Jambhulwadi",
+        Latitude: 18.437171,
+        Longitude: 73.840935,
+        zoom: 17,
+      },
+      {
+        name: "MulaMutha",
+        Latitude: 18.535973,
+        Longitude: 73.935564,
+        zoom: 13,
+      },
+    ];
+  </script>
+
+  <script type="text/javascript">
+    var fromdate = "";
+    var todate = "";
+    var selocation = "";
+
+    var today = new Date();
+
+    var twoMonthsAgo = new Date(
+      today.getFullYear(),
+      today.getMonth() - 2,
+      today.getDate()
+    );
+
+    //calendar from validation
+    $("#datepickerfrom")
+      .datepicker({
+        endDate: twoMonthsAgo,
+        format: "dd-mm-yyyy",
+        beforeShowDay: function (date) {
+          // Calculate the date 2 months ago
+          var twoMonthsAgo = new Date();
+          twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+
+          // Disable dates more than 2 months ago
+          if (date > twoMonthsAgo) {
+            return { enabled: false };
+          }
+
+          return { enabled: true };
+        },
+      })
+      .on("changeDate", function (e) {
+        console.log("datepickerfrom", e.date);
+
+        var selectedDate = moment(e.date).format("YYYY-MM-DD");
+        fromdate = selectedDate;
+        document.getElementById("myInput").disabled = false;
+        $("#datepickerto").datepicker(
+          "setStartDate",
+          moment(e.date).add(2, "months").toDate()
+        );
+        $(this).datepicker("hide");
+      });
+    //calendar to validation
+    $("#datepickerto")
+      .datepicker({
+        endDate: new Date(),
+        format: "dd-mm-yyyy",
+      })
+      .on("changeDate", function (e) {
+        var selectedDate = moment(e.date).format("YYYY-MM-DD");
+        $(this).datepicker("hide");
+        todate = selectedDate;
+      });
+
+    //Dropdown validation
+    $(".dropdown-item").on("click", function () {
+      var value = $(this).data("value");
+      var selectedName = event.target.getAttribute("name");
+      // console.log(selectedName +" hello"+ typeof(selectedName))
+      $(".dropdown-toggle").text($(this).text());
+      selocation = value;
+
+      // createMap(areas_locations[selectedNum]);
+    });
+    $(".dropdown-menu a").click(function () {
+      $("#selected_location").val($(this).data("value"));
+    });
+
+    const btn = document.querySelector("#btn");
+    const button = document.querySelector(".sidebar-button");
+
+    btn.addEventListener("click", () => {
+      toggleDiv("none");
+    });
+  </script>
+  <script>
+    // call the submitForm function when the form is submitted
+    /*
+    $('#my-form').submit(function(event) {
+          alert("Submit")
+          btn.checked = false;
+    });
+    */
+    // Get the form element
+    const form = document.getElementById("my-form");
+
+    // Add an event listener to the form's submit event
+    form.addEventListener("submit", (event) => {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Get the values of the form fields
+      const dateFrom = document.querySelector('[name="datefrom"]').value;
+      const dateTo = document.querySelector('[name="dateto"]').value;
+      const location = document.querySelector("#selected_location").value;
+      const labelfrom = document.querySelector(".labelfrom");
+      const labelTo = document.querySelector(".labelto");
+      const labelloc = document.querySelector(".labelloc");
+
+      console.log(dateFrom, dateTo, location);
+      // Check if all required fields are filled
+      const fields = [
+        { value: dateFrom, label: labelfrom },
+        { value: dateTo, label: labelTo },
+        { value: location, label: labelloc },
+      ];
+
+      for (let field of fields) {
+        if (!field.value) {
+          field.label.style.color = "red";
+          return;
+        }
+        field.label.style.color = "white";
+      }
+
+      // If all required fields are filled, submit the form
+      form.submit();
+    });
+  </script>
+  <script></script>
+</html>

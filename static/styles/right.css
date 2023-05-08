@@ -1,0 +1,46 @@
+/* .box {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background-color: #ccc;
+    padding: 20px;
+    box-sizing: border-box;
+} */
+
+  /* .container {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 50rem !important;
+    height: 40rem !important;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .15);
+    
+    backdrop-filter: blur(5px);
+  } */
+
+  #mydiv {
+    position: fixed;
+    z-index: 999999999999999999999;
+    background-color: #f1f1f1;
+    border: 1px solid #d3d3d3;
+    text-align: center;
+
+    bottom: 0;
+    right: 0;
+    width: 50rem !important;
+    height: 100% !important;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .15);
+    
+    backdrop-filter: blur(5px);
+  }
+  #wrapper {
+    background: #ccc;
+    overflow: hidden;
+    transition: height 200ms;
+  }

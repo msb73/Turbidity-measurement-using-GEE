@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/fol.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/dropdowncode.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/right.css') }}">
+
+
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    
+    <!-- For maps -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" />
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" />
+
+
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- For UI -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+
+    <!-- For icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+
+    <!-- for calendar    -->
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+
+
+
+
+    <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        /* #map_8542910ce8a63ee35340afaac40895e4 {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        } */
+        #map {
+            height: 100px;
+        }
+
+        .leaflet-container {
+            font-size: 1rem;
+        }
+    </style>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css" />
+
+
+
+            <style>
+                #export {
+                    position: absolute;
+                    top: 5px;
+                    right: 10px;
+                    z-index: 999;
+                    background: white;
+                    color: black;
+                    padding: 6px;
+                    border-radius: 4px;
+                    font-family: 'Helvetica Neue';
+                    cursor: pointer;
+                    font-size: 12px;
+                    text-decoration: none;
+                    top: 90px;
+                }
+            </style>
+        
+</head>
+<body>
+    <div class="wrapper">
+        <input type="checkbox" id="btn" hidden checked>
+        <label for="btn" class="menu-btn">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-times"></i>
+        </label>
+        <nav id="sidebar">
+            <div class="title">Turbidity Measure</div>
+            <ul class="list-items">
+                <br>
+                <form id="my-form" action="{{ url_for('submit_data') }}" method="POST">
+                    <div class="row form-group">
+                        <p class="labels"> Date from :</p>
+                        <div class="col-sm-11">
+                            <div class="input-group date" id="datepickerfrom">
+                                <!-- <input type="text" class="form-control calendarfrom"> -->
+                                <input type="text" class="form-control calendarfrom" name="datefrom" required>
+                                <span class="input-group-append">
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <p class="labels"> Date to :</p>
+                        <div class="col-sm-11">
+                            <div class="input-group date" id="datepickerto">
+                                <input type="text" class="form-control" id="myInput" name="dateto">
+
+                                <span class="input-group-append">
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <p class="labels">Select location :</p>
+                        <div class="dropdown">
+                            <button class="dropdown-toggle col-sm-11" type="button" data-toggle="dropdown"
+                                required>Select an
+                                option</button>
+                            <ul class="dropdown-menu col-sm-10">
+                                <li><a class="dropdown-item" href="#" data-value="Khadakwasla" name="0">Khadakwasla
+                                        Dam</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Jambhulwadi" name="1">Jambhulwadi
+                                        Lake</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="Mula mutha" name="2">Mula Mutha
+                                        River</a></li>
+                            </ul>
+                            <input type="hidden" name="location" id="selected_location">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="sidebar-button">SUBMIT</button>
+
+
+                </form>
+
+                <!-- <li><a href="#"><i class="fas fa-envelope"></i>Contact us</a></li> -->
+                <div class="icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </ul>
+        </nav>
+    </div>
+    
+    
+            <div class="folium-map" id="map_e5fc3bb6c1e9fd771fdd256ba5f446e4" ></div>
+        
+            <a href='#' id='export'>Export</a>
+
+
+<!-- <div class="folium-map" id="map_7c09348c5ddc6c005363f5a01a1e2dc1" ></div> -->
+    <!-- <div class="folium-map" id="map_8542910ce8a63ee35340afaac40895e4"></div> -->
+    <!-- <div class="container">
+
+    </div> -->
+    <div id="mydiv" style="display: none;">
+        <!-- Include a header DIV with the same name as the draggable DIV, followed by "header" -->
+        <div id="mydivheader">Click here to move</div>
+        <p>Move</p>
+        <p>this</p>
+        <p>DIV</p>
+    </div>
+
+</body>
+<script>
+    
+    
+            var map_e5fc3bb6c1e9fd771fdd256ba5f446e4 = L.map(
+                "map_e5fc3bb6c1e9fd771fdd256ba5f446e4",
+                {
+                    center: [18.41, 73.74],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 12,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d51f416bc2a7f9c0a6383d591c6ea3b6 = L.tileLayer(
+                "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg",
+                {"attribution": "Map tiles by \u003ca target=\"_blank\" href=\"http://stamen.com\"\u003eStamen Design\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by/3.0\"\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://creativecommons.org/licenses/by-sa/3.0\"\u003eCC BY SA\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_e5fc3bb6c1e9fd771fdd256ba5f446e4);
+        
+    
+            var options = {
+              position: "topleft",
+              draw: {"circle": false, "circlemarker": false, "marker": true, "polygon": false, "polyline": false, "rectangle": false},
+              edit: {"edit": false},
+            }
+            // FeatureGroup is to store editable layers.
+            var drawnItems = new L.featureGroup().addTo(
+                map_e5fc3bb6c1e9fd771fdd256ba5f446e4
+            );
+            options.edit.featureGroup = drawnItems;
+            var draw_control_220fe549d53c18fbd8efc8c2ad9ca315 = new L.Control.Draw(
+                options
+            ).addTo( map_e5fc3bb6c1e9fd771fdd256ba5f446e4 );
+            map_e5fc3bb6c1e9fd771fdd256ba5f446e4.on(L.Draw.Event.CREATED, function(e) {
+                var layer = e.layer,
+                    type = e.layerType;
+                var coords = JSON.stringify(layer.toGeoJSON());
+                layer.on('click', function() {
+                    alert(coords);
+                    console.log(coords);
+                });
+                drawnItems.addLayer(layer);
+             });
+            map_e5fc3bb6c1e9fd771fdd256ba5f446e4.on('draw:created', function(e) {
+                drawnItems.addLayer(e.layer);
+            });
+            
+            document.getElementById('export').onclick = function(e) {
+                var data = drawnItems.toGeoJSON();
+                var convertedData = 'text/json;charset=utf-8,'
+                    + encodeURIComponent(JSON.stringify(data));
+                document.getElementById('export').setAttribute(
+                    'href', 'data:' + convertedData
+                );
+                document.getElementById('export').setAttribute(
+                    'download', "my_data.json"
+                );
+            }
+            
+        
+    
+            var tile_layer_e572efe531cd6634971db02a05633350 = L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=m\u0026x={x}\u0026y={y}\u0026z={z}",
+                {"attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_e5fc3bb6c1e9fd771fdd256ba5f446e4);
+        
+    
+            var tile_layer_4107fbbe4654a86aa5df7df529663a4f = L.tileLayer(
+                "https://mt1.google.com/vt/lyrs=y\u0026x={x}\u0026y={y}\u0026z={z}",
+                {"attribution": "Google", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_e5fc3bb6c1e9fd771fdd256ba5f446e4);
+        
+    
+            var layer_control_5f0758bdce6f5119b16195776da44371 = {
+                base_layers : {
+                    "stamenterrain" : tile_layer_d51f416bc2a7f9c0a6383d591c6ea3b6,
+                },
+                overlays :  {
+                    "Google Maps" : tile_layer_e572efe531cd6634971db02a05633350,
+                    "Google Satellite" : tile_layer_4107fbbe4654a86aa5df7df529663a4f,
+                },
+            };
+            L.control.layers(
+                layer_control_5f0758bdce6f5119b16195776da44371.base_layers,
+                layer_control_5f0758bdce6f5119b16195776da44371.overlays,
+                {"autoZIndex": true, "collapsed": true, "position": "topright"}
+            ).addTo(map_e5fc3bb6c1e9fd771fdd256ba5f446e4);
+        
+</script>
+
+
+<script>
+    function toggleDiv(data) {
+        var div = document.getElementById("mydiv");
+
+        //   alert(data)
+
+        if (data === "block") {
+            div.style.display = "block";
+        } else {
+            div.style.display = "none";
+        }
+    }
+</script>
+<script>
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("mydiv"));
+
+    function dragElement(elmnt) {
+        var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+        if (document.getElementById(elmnt.id + "header")) {
+            // if present, the header is where you move the DIV from:
+            document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
+        } else {
+            // otherwise, move the DIV from anywhere inside the DIV:
+            elmnt.onmousedown = dragMouseDown;
+        }
+
+        function dragMouseDown(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // get the mouse cursor position at startup:
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            document.onmouseup = closeDragElement;
+            // call a function whenever the cursor moves:
+            document.onmousemove = elementDrag;
+        }
+
+        function elementDrag(e) {
+            e = e || window.event;
+            e.preventDefault();
+            // calculate the new cursor position:
+            pos1 = pos3 - e.clientX;
+            pos2 = pos4 - e.clientY;
+            pos3 = e.clientX;
+            pos4 = e.clientY;
+            // set the element's new position:
+            elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+            elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+
+        function closeDragElement() {
+            // stop moving when mouse button is released:
+            document.onmouseup = null;
+            document.onmousemove = null;
+        }
+    }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script>
+
+    const areas_locations = [
+        {
+            name: "Khadakwasla",
+            Latitude: 18.409749,
+            Longitude: 73.700581,
+            zoom: 14,
+
+        },
+        {
+            name: "Jambhulwadi",
+            Latitude: 18.437171,
+            Longitude: 73.840935,
+            zoom: 17,
+
+        },
+        {
+            name: "MulaMutha",
+            Latitude: 18.535973,
+            Longitude: 73.935564,
+            zoom: 13,
+
+        }
+    ]
+
+
+   
+
+
+</script>
+
+
+<script type="text/javascript">
+
+    var fromdate = "";
+    var todate = "";
+    var selocation = "";
+
+
+
+    var today = new Date();
+
+    var twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+
+    $('#datepickerfrom').datepicker({
+        endDate: twoMonthsAgo,
+        format: 'dd-mm-yyyy'
+    }).on('changeDate', function (e) {
+        console.log("datepickerfrom", e.date)
+
+
+        var selectedDate = moment(e.date).format('YYYY-MM-DD');
+        fromdate = selectedDate;
+
+        document.getElementById("myInput").disabled = false;
+        $('#datepickerto').datepicker('setStartDate', moment(e.date).add(1, 'months').toDate());
+        $(this).datepicker('hide');
+
+
+    });
+
+
+    $('#datepickerto').datepicker({
+
+        endDate: new Date(),
+        format: 'dd-mm-yyyy'
+    }).on('changeDate', function (e) {
+        var selectedDate = moment(e.date).format('YYYY-MM-DD');
+        $(this).datepicker('hide');
+        todate = selectedDate
+    });
+
+    $('.dropdown-item').on('click', function () {
+
+        var value = $(this).data('value');
+        var selectedName = event.target.getAttribute("name");
+        // console.log(selectedName +" hello"+ typeof(selectedName))
+        $('.dropdown-toggle').text($(this).text());
+        selocation = value;
+
+
+
+        // createMap(areas_locations[selectedNum]);
+
+
+    });
+    $('.dropdown-menu a').click(function () {
+        $('#selected_location').val($(this).data('value'));
+    });
+
+
+
+
+    const btn = document.querySelector('#btn');
+    const button = document.querySelector('.sidebar-button');
+
+    btn.addEventListener('click', () => {
+        toggleDiv("none");
+
+    })
+
+
+
+    button.addEventListener('click', () => {
+        if (!selocation) {
+            console.log("Fill details")
+        } else {
+
+
+            const submitdata = {
+                P_fromdate: fromdate,
+                P_todate: todate,
+                P_selocation: selocation
+            };
+
+            console.log(submitdata)
+
+            fetch('/submitdata', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(submitdata)
+            })
+                // .then(response => response.json())
+                // .then(data => {
+                //     btn.checked = false;
+                //     // console.log('Success:', data);
+                // })
+                // .catch((error) => {
+                //     console.error('Error:', error);
+                // });
+                .then(response => response.json())
+                .then(data => {
+                    console.log("asfdsf", data)
+                })
+                .catch(error => {
+                    // handle network error
+                    console.error('Failed to retrieve name:', error);
+                });
+
+
+
+
+        }
+
+    });
+</script>
+<!-- <script>
+    function submitForm() {
+      // submit the form using AJAX
+      $.ajax({
+        url: $('#my-form').attr('action'),
+        method: $('#my-form').attr('method'),
+        data: $('#my-form').serialize(),
+        success: function(response) {
+          // reload the page
+          location.reload();
+        }
+      });
+    }
+    
+    // call the submitForm function when the form is submitted
+    $('#my-form').submit(function(event) {
+      event.preventDefault();
+      submitForm();
+    });
+    </script>  
+     -->
+
+
+</html>
