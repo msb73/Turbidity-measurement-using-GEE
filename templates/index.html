@@ -289,10 +289,16 @@
           </div>
         </div>
 
-        <img
+        <!--<img
           id="myImage"
-          src="static/graphs/su3.gif"
-          style="width: 100%; height: 100px; padding: 10px"
+          src="static/graphs/bar_chart.png"
+          style="width: 100%; height: 200px; padding: 10px"
+        /> -->
+        <img
+          id="my-image"
+          src="{{ url_for('static', filename='graphs/su3.gif') }}"
+          style="width: 100%; height: 400px; padding: 5px"
+          alt="My1 Image"
         />
 
         <table id="myTable">
@@ -332,6 +338,17 @@
       </button>
     </div>
   </body>
+  <script>
+    var imagegraph = document.getElementById("my-image");
+
+    function changeImage() {
+      alert("Image");
+      imagegraph.setAttribute(
+        "src",
+        "{{ url_for('static', filename='graphs/bar_chart.png') }}"
+      );
+    }
+  </script>
   <script>
     // Select the HTML elements that contain the values to be updated
     const dateElement = document.getElementById("date");
@@ -398,6 +415,7 @@
       turbidityElement.textContent = `Turbidity Value: ${Turbidity_Value}`;
 
       increaseProgress(Turbidity_Value);
+      changeImage();
     }
     function increaseProgress(progress) {
       const bar = document.querySelector(".bar");
@@ -535,8 +553,6 @@
     //To call the graphs api
     const coor = [];
 
-    var img = document.getElementById("myImage");
-
     function showGraphs(data) {
       //alert("Hello");
       //img.src = "static/graphs/su3.gif";
@@ -563,8 +579,6 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("jagfduagf");
-
             if (data.success) {
               UpdateAnalysisValues(data);
               coor.push(data.Coordinates);
@@ -572,12 +586,12 @@
               alert("Point selected out-of masked area.");
             }
             var fileNames = data.fileName;
-            let concats = "static/" + fileNames;
+            //let concats = "static/" + fileNames;
 
             let currentCard = null;
 
-            addNewCard(concats, newCoordinates, currentCard);
-            img.src = concats;
+            //addNewCard(concats, newCoordinates, currentCard);
+            let concats = "static//graphs/bar_chart.png";
           })
           .catch((error) => {
             console.error("Error:", error);
