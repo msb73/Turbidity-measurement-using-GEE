@@ -265,11 +265,6 @@
     <iframe id="my-iframe" src="map.html"></iframe>
 
     <div id="mydiv" style="display: none">
-      <!--<img
-        id="myImage"
-        src="static/graphs/su3.gif"
-        style="width: 100%; height: 100px; padding: 10px"
-      />-->
       <!-- <div class="accordion" id="accordionExample"></div>-->
       <div id="ainnerdiv">
         <div class="atitle">Turbidity Analysis</div>
@@ -283,6 +278,7 @@
             <div class="bar"></div>
             <br />
           </div>
+
           <div class="Plabels">
             <p>0</p>
             <p>10</p>
@@ -292,6 +288,12 @@
             <p>50</p>
           </div>
         </div>
+
+        <img
+          id="myImage"
+          src="static/graphs/su3.gif"
+          style="width: 100%; height: 100px; padding: 10px"
+        />
 
         <table id="myTable">
           <thead>
@@ -514,27 +516,6 @@
 
       currentCard = newCard;
     }
-
-    function openExistingCard(fileNames) {
-      let fileNa = JSON.stringify(fileNames);
-      fileNa = fileNa.replace(/[.,\[\] ]/g, "");
-      const newCardId = `card-${fileNa}`;
-
-      const cardss = document.querySelector(".card");
-      // Get the contents inside the element
-      const cardContents = cardss.innerHTML;
-
-      // Log the contents to the console
-      console.log(cardContents);
-
-      const card = document.getElementById(cardId);
-      if (card) {
-        const button = card.querySelector(".btn-link");
-        if (button) {
-          button.click();
-        }
-      }
-    }
   </script>
   <script>
     function toggleButton(data) {
@@ -556,12 +537,10 @@
 
     var img = document.getElementById("myImage");
 
-    //
     function showGraphs(data) {
       //alert("Hello");
       //img.src = "static/graphs/su3.gif";
       if (coor.length > 0) {
-        alert("done");
         toggleButton("block");
       }
       console.log(coor.length);
@@ -573,7 +552,8 @@
         (arr) => JSON.stringify(arr) === JSON.stringify(newCoordinates)
       );
       if (!isPresent) {
-        coor.push(newCoordinates);
+        console.log("graphg", newCoordinates);
+
         fetch("/getCoordinates", {
           method: "POST",
           headers: {
@@ -583,30 +563,25 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("jagfduagf", data)
-            if (data.success){
+            console.log("jagfduagf");
+
+            if (data.success) {
               UpdateAnalysisValues(data);
-
+              coor.push(data.Coordinates);
+            } else {
+              alert("Point selected out-of masked area.");
             }
-            else{
-              alert("Check the lavdyass")
-            }
-            //var fileNames = data.fileName;
-            //let concats = "static/" + fileNames;
+            var fileNames = data.fileName;
+            let concats = "static/" + fileNames;
 
-            //let currentCard = null;
+            let currentCard = null;
 
-            //addNewCard(concats, newCoordinates, currentCard);
-            //img.src = concats;
+            addNewCard(concats, newCoordinates, currentCard);
+            img.src = concats;
           })
           .catch((error) => {
             console.error("Error:", error);
           });
-      } else {
-        const orsss = "[" + newCoordinates[0] + ", " + newCoordinates[1] + "]";
-        const fileName = "static/graphs/" + orsss + ".png";
-        //img.src = fileName;
-        openExistingCard(fileName, newCoordinates);
       }
       // var  concat = "{{ url_for('static', filename='graphs/Settings.gif')}}";
       toggleDiv("block");

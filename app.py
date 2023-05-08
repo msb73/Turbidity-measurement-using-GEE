@@ -195,7 +195,7 @@ def submit_data():
     basemaps['Google Satellite Hybrid'].add_to(my_map)
     global collection
     # collection = imageCollection(date)
-    
+
     collection = layers.ndti(date, my_map, location)
     my_map.add_child(folium.LayerControl())
     # my_map.add_child(folium.LayerControl())
@@ -208,8 +208,6 @@ def submit_data():
                                                                              'circlemarker': False}, edit_options={'edit': False})
 
     draw_data.add_to(my_map)
-
-    
 
     repl = "alert(coords);"
 
@@ -245,17 +243,18 @@ def get_Coordinates():
     # get the JSON data from the request body
 
         Coordinates = json.loads(Coordinates)
-        # print(type(Coordinates))
+        print("Grapghssssssssssssssssssss",
+              Coordinates['geometry']['coordinates'])
         # print(Coordinates['geometry']['coordinates'])
 
         respo = ndti_values(
             None, Coordinates['geometry']['coordinates'], collection)
-        #print(respo, type(respo))
+        # print(respo, type(respo))
         ls = list(respo.values())
-        print(ls, type(ls), len(ls), ls[0])
-        if ls[0] == None:
-            return jsonify({'success': False }), 200
-            
+        # print(ls, type(ls), len(ls), ls[0])
+        if len(ls[0]) == 0:
+            return jsonify({'success': False, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
+
         ls_dates = list(respo.keys())
         Dates = []
         NDTI_values = []
@@ -271,9 +270,9 @@ def get_Coordinates():
             sum = sum + i
         mean = sum / float(len(ls))
 
-        print(Dates)
-        print(NDTI_values)
-        print(respo)
+        # print(Dates)
+        # print(NDTI_values)
+        # print(respo)
 
         # graph_num += 1
         # return a success response
@@ -291,7 +290,6 @@ def Export_All_Cord():
         print("******************************", AllCord)
         # AllCord = json.loads(AllCord)
         print(type(AllCord))
-
 
         # graph_num += 1
         return jsonify({'success': True}), 200  # return a success response
