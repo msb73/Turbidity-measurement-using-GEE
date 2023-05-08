@@ -250,7 +250,12 @@ def get_Coordinates():
 
         respo = ndti_values(
             None, Coordinates['geometry']['coordinates'], collection)
+        #print(respo, type(respo))
         ls = list(respo.values())
+        print(ls, type(ls), len(ls), ls[0])
+        if len(ls[0]) == 0:
+            return jsonify({'success': False }), 200
+            
         ls_dates = list(respo.keys())
         Dates = []
         NDTI_values = []
@@ -286,6 +291,7 @@ def Export_All_Cord():
         print("******************************", AllCord)
         # AllCord = json.loads(AllCord)
         print(type(AllCord))
+        
 
         # graph_num += 1
         return jsonify({'success': True}), 200  # return a success response

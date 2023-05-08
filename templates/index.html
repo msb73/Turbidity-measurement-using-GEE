@@ -583,7 +583,14 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            UpdateAnalysisValues(data);
+            console.log("jagfduagf", data)
+            if (data.success){
+              UpdateAnalysisValues(data);
+
+            }
+            else{
+              alert("Check the lavdyass")
+            }
             //var fileNames = data.fileName;
             //let concats = "static/" + fileNames;
 
