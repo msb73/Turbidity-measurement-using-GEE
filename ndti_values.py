@@ -73,7 +73,7 @@ def ndti_values(graph_num, cordinates, image):
     # Extract the date and turbidity data from the dictionary
     dates = list(dic.keys())
     turbidity_values = list(dic.values())
-    
+
     #
     # Create a line chart of the turbidity data
     plt.plot(dates, turbidity_values)
@@ -82,7 +82,7 @@ def ndti_values(graph_num, cordinates, image):
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
     # Save the graph as a PNG image file
-    plt.savefig(f'graphs/line_chart.png')
+    plt.savefig(f'static/graphs/line_chart.png')
     plt.clf()
 
     # plt.clf()
@@ -96,9 +96,40 @@ def ndti_values(graph_num, cordinates, image):
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
     # Save the graph as a PNG image file
-    plt.savefig(f'graphs/bar_chart.png')
+    plt.savefig(f'static/graphs/bar_chart.png')
     # plt.show()
     plt.clf()
+
+
+    import pandas as pd
+
+    # Assuming that `dates` and `turbidity_values` are already defined
+
+    # Create a dictionary with the two lists
+    import pandas as pd
+
+    # Define the filename for the Excel file
+    filename = 'static/graphs/data.xlsx'
+
+    # Get the dates and turbidity values for this iteration
+    dates = list(dic.keys())
+    turbidity_values = list(dic.values())
+
+    # Create a new DataFrame for the new data
+    new_data = pd.DataFrame({'Date': dates, 'Turbidity': turbidity_values})
+
+    # Read the existing Excel file into a DataFrame, or create a new DataFrame if the file doesn't exist
+    try:
+        existing_data = pd.read_excel(filename)
+    except FileNotFoundError:
+        existing_data = pd.DataFrame()
+
+    # Append the new data to the existing DataFrame
+    updated_data = pd.concat([existing_data, new_data], ignore_index=True)
+
+    # Write the updated DataFrame back to the Excel file
+    updated_data.to_excel(filename, index=False)
+
     return dic
     # Start a new thread to run the plot_data function
     # thread = threading.Thread(target=plot_data)
