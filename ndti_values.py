@@ -73,7 +73,7 @@ def ndti_values(graph_num, cordinates, image):
     # Extract the date and turbidity data from the dictionary
     dates = list(dic.keys())
     turbidity_values = list(dic.values())
-
+    
     #
     # Create a line chart of the turbidity data
     plt.plot(dates, turbidity_values)
