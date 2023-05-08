@@ -28,11 +28,16 @@ def ndti_values(graph_num, cordinates, image):
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {i[:8]: j for i, j in reduced.items()}
-    return dic
+    dic = {i[:8]: j[0] for i, j in reduced.items()}
+    print(dic)
+
+    '''
+    
+    
+    #return dic
     count =0
-    for i in reduced:
-        dic[i[:8]].append(reduced[i])
+    # for i in reduced:
+    #     dic[i[:8]].append(reduced[i])
     # print(reduced.getInfo())
     # print(dic)
     # print(len(dic))
@@ -58,16 +63,17 @@ def ndti_values(graph_num, cordinates, image):
 
 
     # Loop through the dictionary and convert the RGB values to mean turbidity values
+    print(dic)
     for date in dic:
         rgb_values = dic[date]
         turbidity_values = [rgb_to_turbidity(rgb) for rgb in rgb_values]
         mean_turbidity = sum(turbidity_values) / len(turbidity_values)
         dic[date] = mean_turbidity
-
+    '''
     # Extract the date and turbidity data from the dictionary
     dates = list(dic.keys())
     turbidity_values = list(dic.values())
-
+    
     #
     # Create a line chart of the turbidity data
     plt.plot(dates, turbidity_values)
@@ -76,7 +82,9 @@ def ndti_values(graph_num, cordinates, image):
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
     # Save the graph as a PNG image file
-    plt.savefig(f'graphs/line_chart_{graph_num}.png')
+    plt.savefig(f'graphs/line_chart.png')
+    plt.clf()
+
     # plt.clf()
     # plt.show()
 
@@ -88,9 +96,10 @@ def ndti_values(graph_num, cordinates, image):
     plt.ylabel('Turbidity')
     plt.xticks(rotation=45)
     # Save the graph as a PNG image file
-    plt.savefig(f'graphs/bar_chart_{graph_num}.png')
+    plt.savefig(f'graphs/bar_chart.png')
     # plt.show()
     plt.clf()
+    return dic
     # Start a new thread to run the plot_data function
     # thread = threading.Thread(target=plot_data)
     # thread.start()

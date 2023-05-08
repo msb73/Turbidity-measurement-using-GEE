@@ -266,8 +266,8 @@ def get_Coordinates():
             # Format the datetime object as a string in DD/MM/YYYY format
             formatted_date_str = date_obj.strftime('%d/%B/%Y')
             Dates = Dates + [formatted_date_str]
-            NDTI_values = NDTI_values + [i[0]]
-            sum = sum + i[0]
+            NDTI_values = NDTI_values + [i]
+            sum = sum + i
         mean = sum / float(len(ls))
 
         # print(Dates)
