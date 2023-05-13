@@ -28,7 +28,7 @@ def ndti_values(graph_num, cordinates, image):
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {i[:8]: j[0] for i, j in reduced.items()}
+    dic = {i[:8]: j[0]*10 for i, j in reduced.items()}
     print(dic)
 
     '''

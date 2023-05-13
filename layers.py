@@ -64,7 +64,7 @@ def ndti(date, map, name):
           [73.711, 18.406],
           [73.696, 18.405],
           [73.692, 18.399]]]),
-    'Jambulwadi' : ee.Geometry.Polygon(
+    'Jambhulwadi' : ee.Geometry.Polygon(
         [[[73.838, 18.432],
           [73.839, 18.432],
           [73.841, 18.433],
@@ -154,7 +154,7 @@ def ndti(date, map, name):
     visParams = {'min':minMax['NDTI_min'], 'max':minMax['NDTI_max'], 
                  'bands' : ['NDTI'],
                  'opacity' : 1,
-         'palette':['225ea8','41b6c4','a1dab4','034B48']
+                 'palette': ['red', 'yellow', 'green', 'cyan', 'blue']
          }
     # visParams = {'min':0, 'max':1, 
     #              'bands' : ['NDTI'],
