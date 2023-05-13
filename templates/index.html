@@ -320,24 +320,26 @@
       </div>
     -->
       </div>
-
-      <button
-        type="button"
-        class="sidebar-button"
-        id="exportbtn"
-        style="
-          display: none;
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          margin: auto;
-        "
-        onclick="exportData(coor)"
-      >
-        Export
-      </button>
     </div>
+      <button
+      type="button"
+      class="sidebar-button"
+      id="exportbtn"
+      style="
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        width : 50rem !important ;
+      "
+      onclick="exportData(coor)"
+    >
+      Export
+    </button>
+
+
+    
   </body>
   <script>
     var imagegraph = document.getElementById("my-image");
