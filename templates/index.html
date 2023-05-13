@@ -622,6 +622,14 @@
     }
 
     function exportData(coor) {
+      const pdfUrl = "static//graphs/data.xlsx";
+      const link = document.createElement("a");
+      link.href = pdfUrl;
+      link.download = "filename.xlsx";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
       fetch("/ExportAllCord", {
         method: "POST",
         headers: {
