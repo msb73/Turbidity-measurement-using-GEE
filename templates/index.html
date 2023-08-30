@@ -225,7 +225,7 @@
                       >Khadakwasla Dam</a
                     >
                   </li>
-                  <li>
+                  <!--- <li>
                     <a
                       class="dropdown-item"
                       href="#"
@@ -233,7 +233,7 @@
                       name="1"
                       >Jambhulwadi Lake</a
                     >
-                  </li>
+                  </li>-->
                   <li>
                     <a
                       class="dropdown-item"
@@ -345,7 +345,6 @@
     var imagegraph = document.getElementById("my-image");
 
     function changeImage() {
-      alert("Image");
       imagegraph.setAttribute(
         "src",
         "{{ url_for('static', filename='graphs/bar_chart.png') }}"
@@ -365,6 +364,8 @@
       // Example Date and NDTI values
       const dateValues = dateValue;
       const ndtiValues = ndtiValue;
+      console.log("datevalue", dateValue);
+      console.log("ndtiValue", ndtiValue);
 
       // Clear any existing rows in the table body
       table.querySelector("tbody").innerHTML = "";

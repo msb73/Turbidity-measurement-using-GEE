@@ -222,7 +222,7 @@ def submit_data():
     # print(html_string)
 
     rep = """
-                window.parent.showGraphs(coords);        
+            window.parent.showGraphs(coords);        
         """
 
     replaced = html_string.replace(repl, rep)
@@ -249,11 +249,12 @@ def get_Coordinates():
 
         respo = ndti_values(
             None, Coordinates['geometry']['coordinates'], collection)
-        # print(respo, type(respo))
+        print(respo, type(respo))
+        if not respo :
+            return jsonify({'success': False, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
+
         ls = list(respo.values())
         # print(ls, type(ls), len(ls), ls[0])
-        if ls[0] == None:
-            return jsonify({'success': False, 'Coordinates': Coordinates['geometry']['coordinates']}), 200
 
         ls_dates = list(respo.keys())
         Dates = []

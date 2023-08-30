@@ -74,7 +74,7 @@ def ndti(date, map, name):
           [73.839, 18.439],
           [73.838, 18.436],
           [73.838, 18.433]]]),
-    'muthariver' : ee.Geometry.Polygon(
+    'Mula mutha' : ee.Geometry.Polygon(
         [[[73.791, 18.461],
           [73.794, 18.461],
           [73.809, 18.472],

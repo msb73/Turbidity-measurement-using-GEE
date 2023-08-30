@@ -28,7 +28,10 @@ def ndti_values(graph_num, cordinates, image):
         geometry=geometry,
         bestEffort=True,
         scale=10).getInfo()
-    dic = {i[:8]: j[0]*10 for i, j in reduced.items()}
+    try:
+        dic = {i[:8]: j[0]*10 for i, j in reduced.items()}
+    except IndexError:
+        return None
     print(dic)
 
     '''
@@ -72,7 +75,7 @@ def ndti_values(graph_num, cordinates, image):
     '''
     # Extract the date and turbidity data from the dictionary
     dates = list(dic.keys())
-    turbidity_values = list(dic.values())
+    turbidity_values = list( float("{:.2f}".format(i)) for i in  dic.values())
 
     #
     # Create a line chart of the turbidity data
@@ -113,7 +116,9 @@ def ndti_values(graph_num, cordinates, image):
 
     # Get the dates and turbidity values for this iteration
     dates = list(dic.keys())
-    turbidity_values = list(dic.values())
+    t_values    = [round(i*10, 2) for i in dic.values()]
+    print(t_values)
+    turbidity_values = t_values
 
     # Create a new DataFrame for the new data
     new_data = pd.DataFrame({'Date': dates, 'Turbidity': turbidity_values})

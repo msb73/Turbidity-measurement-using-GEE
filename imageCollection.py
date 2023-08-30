@@ -7,7 +7,7 @@ def imageCollection(date, geometry):
     collection = ee.ImageCollection('COPERNICUS/S2_SR')\
         .filterDate(date[0], date[1])\
         .filterBounds(geometry)\
-        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',80))\
+        .filter(ee.Filter.lt('CLOUDY_PIXEL_PERCENTAGE',40))\
         .map(maskS2clouds)\
         .select(['TCI_R', 'TCI_G', 'TCI_B','QA60', 'B3', 'B4', 'B8'])
     return collection
